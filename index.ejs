@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BRICKNGO | Easy Buy</title>
+
+  <!-- Font & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --blue-900:#0b3b91;
+      --blue-700:#1766d1;
+      --orange:#ff9800;
+      --nav-glass:rgba(8,25,50,0.72);
+      --muted:#607d8b;
+      --page-padding:26px;
+      --radius:16px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Montserrat',sans-serif;
+      background:#f4f7fb;
+      color:#0f2940;
+      padding:var(--page-padding);
+      overflow-x:hidden;
+    }
+
+    .animated-bg{
+      position:fixed;inset:0;z-index:-2;
+      background:linear-gradient(120deg,#06204a,#0b3b91,#4da6ff,#ffd49a,#ff9800);
+      background-size:160% 160%;
+      animation:flow 18s linear infinite;
+      opacity:.95;
+    }
+    @keyframes flow{0%{background-position:0% 40%}50%{background-position:100% 60%}100%{background-position:0% 40%}}
+
+    .site{max-width:1150px;margin:auto;position:relative;z-index:2;}
+    .brand{text-align:center;margin-bottom:14px;}
+    .brand img{width:210px;filter:drop-shadow(0 12px 28px rgba(2,18,54,0.22));}
+
+    nav.topnav{
+      display:flex;justify-content:center;gap:20px;
+      background:var(--nav-glass);
+      padding:10px 18px;border-radius:12px;
+      backdrop-filter:blur(10px);
+      box-shadow:0 14px 40px rgba(3,12,35,0.36);
+      margin-bottom:26px;
+    }
+    nav.topnav a{color:#fff;text-decoration:none;font-weight:600;padding:8px 14px;border-radius:10px;transition:.3s;}
+    nav.topnav a:hover{
+      color:#062238;
+      background:linear-gradient(90deg,var(--orange),#ffb74d);
+      transform:translateY(-3px);
+    }
+
+    .hero{
+      text-align:center;
+      background:linear-gradient(135deg,var(--blue-900),var(--blue-700));
+      color:#fff;padding:44px 22px;border-radius:var(--radius);
+      box-shadow:0 28px 60px rgba(3,12,35,0.28);
+      margin-bottom:32px;
+    }
+    .hero h1{font-size:2.2rem;font-weight:800;margin-bottom:10px;}
+    .hero .subtext{font-weight:600;font-size:1.02rem;margin-bottom:10px;color:#ffd;}
+    .hero p.lead{opacity:.95;}
+
+    .panel{background:#fff;border-radius:14px;padding:30px;box-shadow:0 10px 28px rgba(3,12,35,0.12);}
+    .popular-materials h3{text-align:center;font-size:1.95rem;color:#062044;font-weight:800;margin-bottom:10px;}
+    .popular-materials .subline{text-align:center;color:var(--muted);margin-bottom:22px;}
+
+    .product-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;}
+    .product-card{
+      background:linear-gradient(180deg,#fff,#fbfdff);
+      border-radius:12px;padding:14px;text-align:center;
+      transition:.3s;border:1px solid rgba(6,32,68,0.04);cursor:pointer;
+    }
+    .product-card:hover{transform:translateY(-8px);}
+    .product-card img{width:100%;height:170px;object-fit:cover;border-radius:10px;margin-bottom:12px;}
+    .product-card h4{color:#062044;font-size:1.06rem;margin:6px 0;}
+    .product-card p{color:var(--muted);font-size:.95rem;}
+
+    .expand-section{display:none;margin-top:20px;animation:fadeIn .4s ease;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+    .expand-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:10px;}
+    .expand-card{
+      background:#fff;border-radius:10px;box-shadow:0 8px 25px rgba(0,0,0,0.08);
+      text-align:center;padding:12px;transition:.3s;
+    }
+    .expand-card:hover{transform:translateY(-6px);}
+    .expand-card img{width:100%;height:130px;object-fit:cover;border-radius:8px;margin-bottom:8px;}
+    .expand-card h5{color:#0b3b91;margin:6px 0;}
+    .expand-card p{font-size:.9rem;color:#607d8b;}
+    .expand-card .price{color:#ff9800;font-weight:700;margin-top:4px;}
+
+    .description { margin: 34px 0; }
+    .description .panel { padding:28px 26px; text-align:center; }
+    .description p{ max-width:880px; margin: 0 auto 12px; color:#0f2940; font-weight:500; line-height:1.75; }
+    .description .tagline{ margin-top:10px; color:#062044; font-weight:800; font-size:1.08rem; font-style:italic }
+
+    footer{text-align:center;color:#fff;background:linear-gradient(90deg,var(--blue-900),var(--blue-700));padding:20px;border-radius:10px;margin-top:28px;}
+    .contact-float{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:12px;}
+    .contact-float a{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 10px 24px rgba(0,0,0,0.2);}
+    .whatsapp{background:#25d366;}
+    .call{background:#ff9800;}
+  </style>
+</head>
+<body>
+  <div class="animated-bg"></div>
+
+  <div class="site">
+    <header class="brand"><img src="/images/brickngo_logo.jpg" alt="BRICKNGO Logo"></header>
+
+    <nav class="topnav">
+      <a href="/">Home</a>
+      <a href="/products">Products</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+
+    <section class="hero">
+      <h1>Strong Foundations Begin with BRICKNGO</h1>
+      <div class="subtext">Red Bricks, Sand, Kankar &amp; Robo Sand — available at the best prices</div>
+      <p class="lead">Reliable, high-quality materials for every construction need.</p>
+    </section>
+
+    <section class="popular-materials">
+      <div class="panel">
+        <h3>Popular Building Materials</h3>
+        <div class="subline">Choose the right material for your project — quality assured, delivery on time.</div>
+
+        <div class="product-container">
+          <article class="product-card" onclick="toggleExpand('sand')">
+            <img src="/images/sand.jpeg" alt="Sand">
+            <h4>Sand</h4>
+            <p>High-quality fine sand ideal for concrete and plastering works.</p>
+          </article>
+          <article class="product-card" onclick="toggleExpand('robo')">
+            <img src="/images/robo sand.jpeg" alt="Robo Sand">
+            <h4>Robo Sand</h4>
+            <p>Manufactured sand with uniform grain size for strong structural work.</p>
+          </article>
+          <article class="product-card" onclick="toggleExpand('bricks')">
+            <img src="/images/red bricks.jpeg" alt="Red Bricks">
+            <h4>Red Bricks</h4>
+            <p>Durable red bricks suitable for walls, pavements, and foundations.</p>
+          </article>
+          <article class="product-card" onclick="toggleExpand('kankar')">
+            <img src="/images/kankar.webp" alt="Kankar">
+            <h4>Kankar (Gravel)</h4>
+            <p>Crushed gravel perfect for road base and concrete flooring.</p>
+          </article>
+        </div>
+
+        <!-- Expandable Sections -->
+        <div id="sand" class="expand-section">
+          <h3>Sand Types</h3>
+          <div class="expand-grid">
+            <div class="expand-card"><img src="/images/sand.jpeg"><h5>Slab Sand</h5><p>Used for foundation concrete.</p><p class="price">₹1600 / tractor</p></div>
+            <div class="expand-card"><img src="/images/sand.jpeg"><h5>Kattubadi Sand</h5><p>Ideal for plastering works.</p><p class="price">₹1500 / tractor</p></div>
+            <div class="expand-card"><img src="/images/sand.jpeg"><h5>Plastering Sand</h5><p>Fine grain for smooth finish.</p><p class="price">₹1400 / tractor</p></div>
+            <div class="expand-card"><img src="/images/sand.jpeg"><h5>1st & 2nd Coating Sand</h5><p>Used for finishing coats.</p><p class="price">₹1300 / tractor</p></div>
+          </div>
+        </div>
+
+        <div id="robo" class="expand-section">
+          <h3>Robo Sand Types</h3>
+          <div class="expand-grid">
+            <div class="expand-card"><img src="/images/robo sand.jpeg"><h5>Fine Robo Sand</h5><p>For plastering & fine work.</p><p class="price">₹1300 / tractor</p></div>
+            <div class="expand-card"><img src="/images/robo sand.jpeg"><h5>Coarse Robo Sand</h5><p>For heavy-duty concrete.</p><p class="price">₹1350 / tractor</p></div>
+          </div>
+        </div>
+
+        <div id="bricks" class="expand-section">
+          <h3>All Brick Varieties</h3>
+          <div class="expand-grid">
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Karimnagar Red Brick</h5><p>Premium quality, uniform shape.</p><p class="price">₹7 / brick</p></div>
+            <div class="expand-card"><img src="/images/bricks(ABN).jpg"><h5>ABN Brick</h5><p>High-strength, smooth finish.</p><p class="price">₹6.5 / brick</p></div>
+            <div class="expand-card"><img src="/images/bricks(ABP).jpeg"><h5>ABP Brick</h5><p>Trusted for durability & load.</p><p class="price">₹6.8 / brick</p></div>
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Local Karimnagar Brick</h5><p>Affordable and sturdy.</p><p class="price">₹6 / brick</p></div>
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Wire Cut Brick</h5><p>Perfect for exterior finish.</p><p class="price">₹9 / brick</p></div>
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Machine Pressed Brick</h5><p>Uniform edges & strength.</p><p class="price">₹8 / brick</p></div>
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Eco Clay Brick</h5><p>Eco-friendly modern design.</p><p class="price">₹7 / brick</p></div>
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Fly Ash Brick</h5><p>Lightweight & sustainable.</p><p class="price">₹6.5 / brick</p></div>
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Perforated Brick</h5><p>Lightweight with insulation.</p><p class="price">₹7.2 / brick</p></div>
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Solid Burnt Brick</h5><p>High resistance to heat.</p><p class="price">₹8.5 / brick</p></div>
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Clay Solid Brick</h5><p>Long-lasting & weatherproof.</p><p class="price">₹7.5 / brick</p></div>
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Fire Resistant Brick</h5><p>Ideal for furnaces & chimneys.</p><p class="price">₹9 / brick</p></div>
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Handmade Brick</h5><p>Classic traditional texture.</p><p class="price">₹7.5 / brick</p></div>
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Water Resistant Brick</h5><p>Reduces seepage effectively.</p><p class="price">₹8 / brick</p></div>
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Compressed Earth Brick</h5><p>Energy-efficient & eco-safe.</p><p class="price">₹7.8 / brick</p></div>
+            <div class="expand-card"><img src="/images/red bricks.jpeg"><h5>Heavy Load Brick</h5><p>For strong walls & base.</p><p class="price">₹8 / brick</p></div>
+          </div>
+        </div>
+
+        <div id="kankar" class="expand-section">
+          <h3>Kankar Types</h3>
+          <div class="expand-grid">
+            <div class="expand-card"><img src="/images/kankar.webp"><h5>20mm Kankar</h5><p>Perfect for solid concrete.</p><p class="price">₹2000 / tractor</p></div>
+            <div class="expand-card"><img src="/images/kankar.webp"><h5>40mm Kankar</h5><p>For base layers & roads.</p><p class="price">₹2100 / tractor</p></div>
+            <div class="expand-card"><img src="/images/kankar.webp"><h5>6mm Kankar</h5><p>Used for flooring layers.</p><p class="price">₹2200 / tractor</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Description (as before) -->
+    <section class="description">
+      <div class="panel">
+        <p>
+          At <strong>BRICKNGO</strong>, we take pride in supplying only the finest building materials that meet both quality and affordability standards.
+          Our products — from premium-grade sand and durable red bricks to precisely processed robo sand and gravel — are sourced from trusted suppliers and tested for strength and consistency.
+        </p>
+        <p>
+          We understand that every construction project deserves reliable materials that stand the test of time. That’s why BRICKNGO focuses on timely delivery, transparent pricing, and uncompromised quality — ensuring our customers build with confidence.
+        </p>
+        <div class="tagline">“Strong Foundations Begin with BRICKNGO.”</div>
+      </div>
+    </section>
+
+    <div class="contact-float">
+      <a class="whatsapp" href="https://wa.me/919618199232" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      <a class="call" href="tel:+919618199232"><i class="fas fa-phone"></i></a>
+    </div>
+
+    <footer>
+      <p>© 2025 BRICKNGO | All Rights Reserved</p>
+      <p><i class="fas fa-phone"></i> +91 96181 99232 &nbsp; | &nbsp; <i class="fas fa-envelope"></i> info@brickngo.com</p>
+    </footer>
+  </div>
+
+  <script>
+    function toggleExpand(id){
+      document.querySelectorAll('.expand-section').forEach(sec=>{
+        sec.style.display=(sec.id===id && sec.style.display!=='block')?'block':'none';
+      });
+      const section=document.getElementById(id);
+      if(section && section.style.display==='block'){
+        window.scrollTo({top:section.offsetTop-80,behavior:'smooth'});
+      }
+    }
+  </script>
+</body>
+</html>

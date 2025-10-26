@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Sri Laxmi Narshima Building Materials</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .dashboard-container { max-width: 1200px; margin: 20px auto; }
+    table { width:100%; border-collapse: collapse; margin-bottom:30px; }
+    th, td { border:1px solid #ccc; padding:10px; text-align:center; }
+    th { background:#2c3e50; color:white; }
+    .btn { padding:8px 15px; background:#1abc9c; color:white; border:none; border-radius:5px; cursor:pointer; }
+    .btn:hover { background:#16a085; }
+    form { margin-bottom:40px; }
+    form input, form textarea { padding:8px; width:100%; margin:5px 0; border-radius:5px; border:1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Admin Dashboard</h1>
+    <a href="/admin/logout" class="btn" style="float:right;">Logout</a>
+
+    <h2>Add New Product</h2>
+    <form action="/admin/add-product" method="POST" enctype="multipart/form-data">
+      <input type="text" name="name" placeholder="Product Name" required>
+      <textarea name="description" placeholder="Product Description" required></textarea>
+      <input type="number" name="price" placeholder="Price" required>
+      <input type="file" name="image" accept="image/*" required>
+      <button type="submit" class="btn">Add Product</button>
+    </form>
+
+    <h2>Existing Products</h2>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Action</th>
+      </tr>
+      <% products.forEach(p => { %>
+      <tr>
+        <td><%= p._id %></td>
+        <td><img src="/images/<%= p.image %>" alt="<%= p.name %>" width="80"></td>
+        <td><%= p.name %></td>
+        <td><%= p.description %></td>
+        <td>₹<%= p.price %></td>
+        <td><a href="/admin/delete-product/<%= p._id %>" class="btn" onclick="return confirm('Are you sure?')">Delete</a></td>
+      </tr>
+      <% }) %>
+    </table>
+
+    <h2>Contact Messages</h2>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Message</th>
+        <th>Date</th>
+      </tr>
+      <% contacts.forEach(c => { %>
+      <tr>
+        <td><%= c.name %></td>
+        <td><%= c.email %></td>
+        <td><%= c.message %></td>
+        <td><%= c.date.toLocaleString() %></td>
+      </tr>
+      <% }) %>
+    </table>
+  </div>
+</body>
+</html>

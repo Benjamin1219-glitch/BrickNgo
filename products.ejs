@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Products | BRICKNGO</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --blue-900:#0b3b91;
+      --blue-700:#1766d1;
+      --blue-400:#4da6ff;
+      --orange:#ff9800;
+      --nav-glass: rgba(8,25,50,0.76);
+      --muted:#607d8b;
+      --card-radius:14px;
+      --site-max:1150px;
+      --pad:24px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:'Montserrat',sans-serif;
+      color:#0f2940;
+      margin:0;
+      padding:var(--pad);
+      overflow-x:hidden;
+    }
+
+    /* Animated background */
+    .animated-bg{
+      position:fixed;inset:0;z-index:-3;
+      background:linear-gradient(120deg,#06204a,#0b3b91,#4da6ff,#ffd49a,#ff9800);
+      background-size:200% 200%;
+      animation:flow 18s linear infinite;
+      opacity:0.95;pointer-events:none;
+    }
+    @keyframes flow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    .site{max-width:var(--site-max);margin:0 auto;position:relative;z-index:2}
+
+    /* Logo */
+    .brand{display:flex;justify-content:center;margin-top:6px;margin-bottom:14px;}
+    .brand img{width:200px;height:auto;object-fit:contain;filter:drop-shadow(0 12px 28px rgba(2,18,54,0.22));}
+
+    /* Navbar */
+    nav.topnav{
+      position:sticky;top:18px;z-index:30;display:flex;justify-content:center;
+      padding:10px 18px;border-radius:12px;background:var(--nav-glass);
+      backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+      box-shadow:0 14px 40px rgba(3,12,35,0.34);
+      margin-bottom:26px;width:fit-content;margin:auto;
+    }
+    .navlinks{display:flex;gap:20px;align-items:center;}
+    nav.topnav a{color:#fff;text-decoration:none;font-weight:700;padding:8px 14px;border-radius:10px;transition:all .28s ease;}
+    nav.topnav a:hover{color:#062238;background:linear-gradient(90deg,var(--orange),#ffb74d);transform:translateY(-3px);box-shadow:0 10px 28px rgba(255,152,0,0.14);}
+
+    .page-heading{text-align:center;margin:18px 0 10px;color:#062044;font-size:1.9rem;font-weight:800;}
+    .page-sub{text-align:center;color:var(--muted);margin-bottom:26px;font-weight:600;}
+
+    .panel{
+      background:rgba(255,255,255,0.98);
+      border-radius:var(--card-radius);
+      padding:26px;
+      box-shadow:0 10px 30px rgba(3,12,35,0.10);
+      border:1px solid rgba(6,32,68,0.04);
+      margin-bottom:28px;
+    }
+    .product-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:20px;
+    }
+    .product-card{
+      background:linear-gradient(180deg,#fff,#fbfdff);
+      border-radius:12px;padding:14px;text-align:center;
+      transition:transform .35s cubic-bezier(.2,.9,.3,1),box-shadow .35s;
+      border:1px solid rgba(6,32,68,0.04);
+    }
+    .product-card:hover{transform:translateY(-10px);box-shadow:0 20px 48px rgba(6,32,68,0.12);}
+    .product-card img{width:100%;height:160px;object-fit:cover;border-radius:10px;margin-bottom:12px;}
+    .product-card h4{color:#062044;font-size:1.08rem;margin:6px 0;font-weight:700;}
+    .product-card p.desc{color:var(--muted);font-size:0.95rem;margin:8px 6px;}
+    .product-card .price{color:var(--orange);font-weight:800;margin-top:8px;font-size:1.05rem;}
+
+    .sub-category{
+      color:#0b3b91;font-size:1.3rem;font-weight:800;margin:22px 0 14px;
+      text-transform:capitalize;border-left:5px solid var(--orange);padding-left:10px;
+    }
+
+    /* Floating Buttons */
+    .contact-float{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:12px;z-index:120;}
+    .contact-float a{
+      width:54px;height:54px;border-radius:50%;
+      display:inline-flex;align-items:center;justify-content:center;
+      color:#fff;text-decoration:none;font-size:20px;
+      box-shadow:0 10px 24px rgba(2,9,34,0.18);transition:transform .18s,box-shadow .18s;
+    }
+    .contact-float a:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(2,9,34,0.22);}
+    .whatsapp{background:linear-gradient(180deg,#25d366,#16b84a);}
+    .call{background:linear-gradient(180deg,var(--orange),#e68a00);}
+
+    footer{margin-top:30px;background:linear-gradient(90deg,rgba(11,59,145,0.95),rgba(23,102,209,0.95));color:#fff;padding:20px;border-radius:10px;text-align:center;box-shadow:0 20px 50px rgba(2,8,32,0.12);}
+    footer a{color:#ffd59e;text-decoration:none;font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="animated-bg"></div>
+
+  <div class="site">
+    <header class="brand">
+      <img src="/images/brickngo_logo.jpg" alt="BRICKNGO Logo">
+    </header>
+
+    <nav class="topnav">
+      <div class="navlinks">
+        <a href="/">Home</a>
+        <a href="/products">Products</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+      </div>
+    </nav>
+
+    <main>
+      <!-- Popular -->
+      <h2 class="page-heading">Popular Building Materials</h2>
+      <p class="page-sub">High-quality materials for every construction need — available and deliverable to your site.</p>
+
+      <section class="panel">
+        <div class="product-grid">
+          <article class="product-card"><img src="/images/sand.jpeg"><h4>Sand</h4><p class="desc">Fine sand ideal for plaster and concrete.</p><div class="price">₹1600/tractor</div></article>
+          <article class="product-card"><img src="/images/robo sand.jpeg"><h4>Robo Sand</h4><p class="desc">Uniform sand for structural strength.</p><div class="price">₹1300/tractor</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Red Bricks</h4><p class="desc">Durable for walls and pavements.</p><div class="price">₹7/brick</div></article>
+          <article class="product-card"><img src="/images/kankar.webp"><h4>Kankar (Gravel)</h4><p class="desc">Perfect for road base and flooring.</p><div class="price">₹2000/tractor</div></article>
+        </div>
+      </section>
+
+      <!-- Sub-Brands -->
+      <h2 class="page-heading">Sub-Brands (Bricks)</h2>
+      <section class="panel">
+        <h3 class="sub-category">Karimnagar Bricks (8 Types)</h3>
+        <div class="product-grid">
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>ABN Bricks</h4><p class="desc">Premium handmade solid bricks.</p><div class="price">₹8/brick</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Classic Bricks</h4><p class="desc">Strong and uniform red bricks.</p><div class="price">₹7/brick</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Super Solid Bricks</h4><p class="desc">High strength bricks for load walls.</p><div class="price">₹8/brick</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Ultra Red Bricks</h4><p class="desc">Bright color, best for finishing work.</p><div class="price">₹7/brick</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Heavy Duty Bricks</h4><p class="desc">Excellent resistance and weight.</p><div class="price">₹8/brick</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Solid Wall Bricks</h4><p class="desc">Best for foundation and walls.</p><div class="price">₹7/brick</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Fine Finish Bricks</h4><p class="desc">Smooth and even surface bricks.</p><div class="price">₹6/brick</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Export Quality Bricks</h4><p class="desc">Top-tier quality for high-end projects.</p><div class="price">₹9/brick</div></article>
+        </div>
+
+        <h3 class="sub-category">Karimnagar Local Bricks (4 Types)</h3>
+        <div class="product-grid">
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Standard Local Bricks</h4><p class="desc">Good quality local production.</p><div class="price">₹5/brick</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Economy Bricks</h4><p class="desc">Budget friendly for minor works.</p><div class="price">₹4.5/brick</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Utility Bricks</h4><p class="desc">Ideal for temporary walls.</p><div class="price">₹4/brick</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Basic Local Bricks</h4><p class="desc">Affordable and reliable.</p><div class="price">₹4.5/brick</div></article>
+        </div>
+
+        <h3 class="sub-category">Local Bricks (4 Types)</h3>
+        <div class="product-grid">
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>General Red Bricks</h4><p class="desc">Common use for small constructions.</p><div class="price">₹5/brick</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Compact Local Bricks</h4><p class="desc">Solid bricks for inner walls.</p><div class="price">₹5/brick</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Rural Build Bricks</h4><p class="desc">Used for small residential sites.</p><div class="price">₹4.8/brick</div></article>
+          <article class="product-card"><img src="/images/red bricks.jpeg"><h4>Everyday Bricks</h4><p class="desc">Good finish for normal construction.</p><div class="price">₹5/brick</div></article>
+        </div>
+      </section>
+
+      <!-- Kankar Types -->
+      <h2 class="page-heading">Kankar Types</h2>
+      <section class="panel">
+        <div class="product-grid">
+          <article class="product-card"><img src="/images/kankar.webp"><h4>20 mm Kankar</h4><p class="desc">Ideal for concrete foundations and flooring.</p><div class="price">₹2000/tractor</div></article>
+          <article class="product-card"><img src="/images/kankar.webp"><h4>40 mm Kankar</h4><p class="desc">Perfect for base layer and roads.</p><div class="price">₹2200/tractor</div></article>
+          <article class="product-card"><img src="/images/kankar.webp"><h4>6 mm Kankar</h4><p class="desc">Used in fine concrete mixing and base coats.</p><div class="price">₹1800/tractor</div></article>
+        </div>
+      </section>
+
+      <!-- Sand Types -->
+      <h2 class="page-heading">Sand Types</h2>
+      <section class="panel">
+        <div class="product-grid">
+          <article class="product-card"><img src="/images/sand.jpeg"><h4>Slab Sand</h4><p class="desc">Perfect for concrete slab and RCC works.</p><div class="price">₹1600/tractor</div></article>
+          <article class="product-card"><img src="/images/sand.jpeg"><h4>Kattubadi Sand</h4><p class="desc">Used for wall and base layering.</p><div class="price">₹1500/tractor</div></article>
+          <article class="product-card"><img src="/images/sand.jpeg"><h4>Plastering Sand</h4><p class="desc">Fine sand for smooth finishing surfaces.</p><div class="price">₹1400/tractor</div></article>
+          <article class="product-card"><img src="/images/sand.jpeg"><h4>1st & 2nd Coating Sand</h4><p class="desc">Best for surface finishing and coatings.</p><div class="price">₹1300/tractor</div></article>
+        </div>
+      </section>
+    </main>
+
+    <!-- Floating Buttons -->
+    <div class="contact-float">
+      <a class="whatsapp" href="https://wa.me/918019447598" target="_blank" title="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      <a class="call" href="tel:+918019447598" title="Call BRICKNGO"><i class="fas fa-phone"></i></a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2025 BRICKNGO | All Rights Reserved</p>
+      <p><a href="tel:+919618199232">📞 Call Us</a> &nbsp; | &nbsp; <a href="mailto:info@brickngo.com">✉️ info@brickngo.com</a></p>
+    </footer>
+  </div>
+</body>
+</html>
