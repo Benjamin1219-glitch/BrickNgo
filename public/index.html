@@ -49,15 +49,15 @@
           <i class="fas fa-home"></i>
           <span>Home</span>
         </a>
-        <a href="#products-catalog" class="dock-item" data-tooltip="Shop" onclick="scrollToProducts(event)">
+        <a href="https://brickngo-backend.onrender.com/shop" class="dock-item" data-tooltip="Shop" target="_blank">
           <i class="fas fa-store"></i>
           <span>Shop</span>
         </a>
-        <a href="/cart.html" class="dock-item" data-tooltip="Cart">
+        <a href="https://brickngo-backend.onrender.com/cart" class="dock-item" data-tooltip="Cart" target="_blank">
           <i class="fas fa-shopping-cart"></i>
           <span>Cart</span>
         </a>
-        <a href="#" onclick="alert('Orders feature is being developed. Please check back soon!'); return false;" class="dock-item" data-tooltip="My Orders">
+        <a href="https://brickngo-backend.onrender.com/orders" class="dock-item" data-tooltip="My Orders" target="_blank">
           <i class="fas fa-box"></i>
           <span>Orders</span>
         </a>
@@ -67,7 +67,7 @@
         </a>
       </div>
       <div class="dock-actions">
-        <a href="/cart.html" class="dock-btn cart-btn" data-tooltip="Shopping Cart">
+        <a href="https://brickngo-backend.onrender.com/cart" class="dock-btn cart-btn" data-tooltip="Shopping Cart" target="_blank">
           <i class="fas fa-shopping-cart"></i>
           <span class="cart-badge" id="homeCartBadge" style="display: none;">0</span>
         </a>
@@ -1721,10 +1721,10 @@
                 <div class="product-image-advanced">
                   <img src="${API_URL}${product.image}" alt="${product.name}" onerror="this.src='/images/placeholder.png'">
                   <div class="product-quick-actions">
-                    <button class="quick-btn" onclick="showProductDetails('${product.name}', '${product.description}', '${product.price}', '${product.unit}')" data-tooltip="Quick View">
+                    <button class="quick-btn" onclick="window.open('https://brickngo-backend.onrender.com/product?id=${product._id}', '_blank')" data-tooltip="Quick View">
                       <i class="fas fa-eye"></i>
                     </button>
-                    <button class="quick-btn" onclick="alert('Cart feature coming soon!')" data-tooltip="Add to Cart">
+                    <button class="quick-btn" onclick="window.open('https://brickngo-backend.onrender.com/cart/add/${product._id}', '_blank')" data-tooltip="Add to Cart">
                       <i class="fas fa-shopping-cart"></i>
                     </button>
                   </div>
@@ -1738,7 +1738,7 @@
                       <span class="price-main">₹${product.price}</span>
                       <span class="price-unit">per ${product.unit}</span>
                     </div>
-                    <button class="btn-add-to-cart magnetic-btn" onclick="alert('Cart feature coming soon!')">
+                    <button class="btn-add-to-cart magnetic-btn" onclick="window.open('https://brickngo-backend.onrender.com/cart/add/${product._id}', '_blank')">
                       <i class="fas fa-cart-plus"></i> Add to Cart
                     </button>
                   </div>
