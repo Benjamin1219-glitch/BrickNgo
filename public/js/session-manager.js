@@ -29,23 +29,28 @@ class SessionManager {
         if (data.success && data.user) {
           this.user = data.user;
           this.isAuthenticated = true;
+          // Store in localStorage for persistence
+          localStorage.setItem('user', JSON.stringify(data.user));
           this.updateUI();
           await this.loadCartCount();
           console.log('✅ User session loaded:', this.user.name);
         } else {
           this.user = null;
           this.isAuthenticated = false;
+          localStorage.removeItem('user');
           this.updateUI();
         }
       } else {
         this.user = null;
         this.isAuthenticated = false;
+        localStorage.removeItem('user');
         this.updateUI();
         console.log('ℹ️ No active session');
       }
     } catch (error) {
       console.error('Session init error:', error);
       this.isAuthenticated = false;
+      localStorage.removeItem('user');
       this.updateUI();
     }
   }
@@ -240,6 +245,9 @@ class SessionManager {
         this.user = null;
         this.isAuthenticated = false;
         this.cartCount = 0;
+        
+        // Clear localStorage
+        localStorage.removeItem('user');
         
         // Show logout message
         this.showNotification('Logged out successfully!', 'success');
