@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <title>BRICKNGO - Smart Building Materials Delivery | Order Online</title>
+  
+  <!-- PWA Meta -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/style-advanced.css">
+  <link rel="stylesheet" href="/css/session-styles.css">
+  <link rel="stylesheet" href="/css/search-styles.css">
+</head>
+<body>
+  
+  <!-- Loading Screen -->
+  <div id="loader" class="loader">
+    <div class="loader-content">
+      <div class="loader-logo">BRICKNGO</div>
+      <div class="loader-bar"></div>
+      <div class="loader-text">Loading materials...</div>
+    </div>
+  </div>
+
+  <!-- Animated Background with Floating Particles -->
+  <div class="animated-background">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    <canvas id="particles-canvas"></canvas>
+  </div>
+
+  <!-- Dock-Style Navigation -->
+  <nav class="dock-nav" id="dockNav">
+    <div class="dock-container">
+      <a href="/" class="dock-logo">
+        <i class="fas fa-hard-hat"></i>
+        <span>BRICKNGO</span>
+      </a>
+      <div class="dock-items">
+        <a href="/" class="dock-item active" data-tooltip="Home">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="#products-catalog" class="dock-item" data-tooltip="Shop" onclick="scrollToProducts(event)">
+          <i class="fas fa-store"></i>
+          <span>Shop</span>
+        </a>
+        <a href="/cart" class="dock-item" data-tooltip="Cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Cart</span>
+        </a>
+        <a href="/orders" class="dock-item" data-tooltip="My Orders">
+          <i class="fas fa-box"></i>
+          <span>Orders</span>
+        </a>
+        <a href="/login" class="dock-item" data-tooltip="Login">
+          <i class="fas fa-user"></i>
+          <span>Login</span>
+        </a>
+      </div>
+      <div class="dock-actions">
+        <a href="/cart" class="dock-btn cart-btn" data-tooltip="Shopping Cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-badge" id="homeCartBadge" style="display: none;">0</span>
+        </a>
+        
+        <!-- User Profile Section (shown when logged in) -->
+        <div class="user-profile-section" id="homeUserProfile" style="display: none;">
+          <div class="user-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <span class="user-name" id="homeUserName"></span>
+        </div>
+        
+        <a href="/login" class="dock-btn profile-btn" id="homeAuthBtn" data-tooltip="Login / Signup">
+          <i class="fas fa-user"></i>
+        </a>
+        <a href="/admin-dashboard" class="dock-btn admin-btn" data-tooltip="Admin Dashboard">
+          <i class="fas fa-cog"></i>
+        </a>
+        <button class="dock-btn theme-btn" onclick="BRICKNGO.toggleTheme()" data-tooltip="Toggle Theme">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section with Animated Elements -->
+  <section class="hero-advanced" id="home">
+    <div class="hero-container">
+      <div class="hero-badge floating">
+        <i class="fas fa-award"></i>
+        <span class="live-counter">
+          <strong id="liveOrderCounter">1,247</strong> tons delivered today
+        </span>
+      </div>
+      
+      <h1 class="hero-title-advanced">
+        <span class="text-reveal">Smart Building Materials</span>
+        <span class="text-reveal delay-1">Delivered to Your</span>
+        <span class="text-reveal delay-2 gradient-text-advanced">Doorstep in Hours</span>
+      </h1>
+      
+      <p class="hero-subtitle-advanced">
+        Order bricks, sand, kankar & more with AR visualization, real-time tracking & instant pricing
+      </p>
+
+      <!-- Smart Search Bar -->
+      <div class="smart-search-bar">
+        <div class="search-tabs">
+          <button class="search-tab active" data-mode="text" id="textSearchTab">
+            <i class="fas fa-search"></i> Search
+          </button>
+          <button class="search-tab" data-mode="voice" id="voiceSearchTab">
+            <i class="fas fa-microphone"></i> Voice
+          </button>
+          <button class="search-tab" data-mode="image" id="imageSearchTab">
+            <i class="fas fa-camera"></i> Image
+          </button>
+        </div>
+        <div class="search-input-container" id="textSearchContainer">
+          <input type="text" class="search-input" placeholder='Try "bricks" or "cement" or "sand"' id="smartSearch">
+          <button class="search-submit magnetic-btn" id="searchSubmitBtn">
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+        <div class="search-input-container" id="voiceSearchContainer" style="display: none;">
+          <button class="voice-search-btn" id="voiceSearchBtn">
+            <i class="fas fa-microphone"></i>
+            <span id="voiceSearchText">Click to speak</span>
+          </button>
+          <div class="voice-animation" id="voiceAnimation" style="display: none;">
+            <div class="voice-wave"></div>
+            <div class="voice-wave"></div>
+            <div class="voice-wave"></div>
+          </div>
+        </div>
+        <div class="search-input-container" id="imageSearchContainer" style="display: none;">
+          <input type="file" id="imageSearchInput" accept="image/*" style="display: none;">
+          <button class="image-search-btn" id="imageSearchBtn">
+            <i class="fas fa-camera"></i>
+            <span>Upload or Capture Image</span>
+          </button>
+          <div id="imagePreview" style="display: none;">
+            <img id="previewImage" src="" alt="Preview">
+            <button class="remove-image-btn" id="removeImageBtn">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div class="search-suggestions">
+          <span class="suggestion-chip" onclick="searchProduct('Bricks')">Bricks</span>
+          <span class="suggestion-chip" onclick="searchProduct('Sand')">Sand</span>
+          <span class="suggestion-chip" onclick="searchProduct('Cement')">Cement</span>
+          <span class="suggestion-chip" onclick="searchProduct('Aggregates')">Aggregates</span>
+        </div>
+        <div class="search-results" id="searchResults" style="display: none;">
+          <div class="search-results-header">
+            <h3>Search Results</h3>
+            <button class="close-search-btn" id="closeSearchBtn">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="search-results-content" id="searchResultsContent"></div>
+        </div>
+      </div>
+
+      <!-- Quick Action Cards -->
+      <div class="quick-actions">
+        <div class="quick-card bounce-card" onclick="window.location.href='/shop'">
+          <div class="quick-icon">
+            <i class="fas fa-store"></i>
+          </div>
+          <div class="quick-content">
+            <h3>Shop Products</h3>
+            <p>Browse all materials</p>
+          </div>
+          <div class="quick-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </div>
+        
+        <div class="quick-card bounce-card" onclick="window.location.href='/cart'">
+          <div class="quick-icon">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <div class="quick-content">
+            <h3>View Cart</h3>
+            <p>Check your items</p>
+          </div>
+          <div class="quick-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </div>
+        
+        <div class="quick-card bounce-card" onclick="BRICKNGO.openCalculator()">
+          <div class="quick-icon">
+            <i class="fas fa-calculator"></i>
+          </div>
+          <div class="quick-content">
+            <h3>Material Calculator</h3>
+            <p>Auto-calculate quantities</p>
+          </div>
+          <div class="quick-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </div>
+
+        <div class="quick-card bounce-card" onclick="BRICKNGO.checkPostcode()">
+          <div class="quick-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <div class="quick-content">
+            <h3>Check Delivery</h3>
+            <p>Enter your postcode</p>
+          </div>
+          <div class="quick-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </div>
+
+        <div class="quick-card bounce-card" onclick="BRICKNGO.openAR()">
+          <div class="quick-icon">
+            <i class="fas fa-cube"></i>
+          </div>
+          <div class="quick-content">
+            <h3>AR Visualizer</h3>
+            <p>See in your space</p>
+          </div>
+          <div class="quick-badge">NEW</div>
+          <div class="quick-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </div>
+
+        <div class="quick-card bounce-card" onclick="BRICKNGO.quickReorder()">
+          <div class="quick-icon">
+            <i class="fas fa-redo"></i>
+          </div>
+          <div class="quick-content">
+            <h3>Quick Reorder</h3>
+            <p>Repeat last order</p>
+          </div>
+          <div class="quick-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Animated Delivery Truck -->
+    <div class="delivery-truck-animation">
+      <i class="fas fa-truck"></i>
+    </div>
+  </section>
+
+  <!-- Same Day Delivery Banner -->
+  <div class="delivery-banner">
+    <div class="banner-content">
+      <i class="fas fa-bolt"></i>
+      <span>Same-day delivery available! Order within</span>
+      <div class="countdown-timer" id="deliveryCountdown">
+        <span class="time-part"><strong id="hours">03</strong>h</span>
+        <span class="time-part"><strong id="minutes">45</strong>m</span>
+        <span class="time-part"><strong id="seconds">20</strong>s</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project-Based Bundles -->
+  <section class="section" id="products">
+    <div class="section-header-advanced">
+      <span class="section-label">POPULAR PACKAGES</span>
+      <h2 class="section-title-advanced">
+        <strong>Project-Based Bundles</strong>
+      </h2>
+      <p class="section-subtitle-advanced">
+        Complete material packages for your construction needs
+      </p>
+    </div>
+
+    <div class="bundles-grid">
+      <!-- Foundation Package -->
+      <div class="bundle-card flip-card">
+        <div class="bundle-front">
+          <div class="bundle-image">
+            <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&h=400&fit=crop" alt="Foundation Package">
+            <div class="bundle-badge">BESTSELLER</div>
+          </div>
+          <div class="bundle-content">
+            <h3 class="bundle-title">Foundation Package</h3>
+            <p class="bundle-desc">Complete materials for 1000 sq.ft foundation</p>
+            <div class="bundle-includes">
+              <span><i class="fas fa-check"></i> 20mm Kankar - 2 loads</span>
+              <span><i class="fas fa-check"></i> Sand - 3 tractors</span>
+              <span><i class="fas fa-check"></i> Cement - 100 bags</span>
+            </div>
+            <div class="bundle-price">
+              <span class="price-label">Starting from</span>
+              <span class="price-value">₹45,000</span>
+            </div>
+            <button class="btn-primary-advanced magnetic-btn">
+              View Details <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+        <div class="bundle-back">
+          <h3>Package Details</h3>
+          <ul class="bundle-specs">
+            <li><strong>Coverage:</strong> 1000 sq.ft</li>
+            <li><strong>Delivery:</strong> Same day</li>
+            <li><strong>Warranty:</strong> Quality guaranteed</li>
+            <li><strong>Save:</strong> 15% vs individual</li>
+          </ul>
+          <div class="bundle-actions">
+            <button class="btn-primary-advanced" onclick="ShoppingCart.add('foundation')">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+            <button class="btn-secondary-advanced" onclick="BRICKNGO.customize('foundation')">
+              <i class="fas fa-sliders-h"></i> Customize
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wall Construction Package -->
+      <div class="bundle-card flip-card">
+        <div class="bundle-front">
+          <div class="bundle-image">
+            <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&h=400&fit=crop" alt="Wall Package">
+            <div class="bundle-badge popular">POPULAR</div>
+          </div>
+          <div class="bundle-content">
+            <h3 class="bundle-title">Wall Construction Package</h3>
+            <p class="bundle-desc">Build 500 sq.ft of 9" wall</p>
+            <div class="bundle-includes">
+              <span><i class="fas fa-check"></i> Red Bricks - 5000 nos</span>
+              <span><i class="fas fa-check"></i> Cement - 50 bags</span>
+              <span><i class="fas fa-check"></i> Sand - 2 tractors</span>
+            </div>
+            <div class="bundle-price">
+              <span class="price-label">Starting from</span>
+              <span class="price-value">₹58,000</span>
+            </div>
+            <button class="btn-primary-advanced magnetic-btn">
+              View Details <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+        <div class="bundle-back">
+          <h3>Package Details</h3>
+          <ul class="bundle-specs">
+            <li><strong>Wall Area:</strong> 500 sq.ft</li>
+            <li><strong>Thickness:</strong> 9 inches</li>
+            <li><strong>Delivery:</strong> Next day</li>
+            <li><strong>Save:</strong> 12% discount</li>
+          </ul>
+          <div class="bundle-actions">
+            <button class="btn-primary-advanced" onclick="ShoppingCart.add('wall')">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+            <button class="btn-secondary-advanced" onclick="BRICKNGO.customize('wall')">
+              <i class="fas fa-sliders-h"></i> Customize
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Plastering Package -->
+      <div class="bundle-card flip-card">
+        <div class="bundle-front">
+          <div class="bundle-image">
+            <img src="https://images.unsplash.com/photo-1616401784845-180882ba9ba8?w=600&h=400&fit=crop" alt="Plastering Package">
+            <div class="bundle-badge eco">ECO FRIENDLY</div>
+          </div>
+          <div class="bundle-content">
+            <h3 class="bundle-title">Plastering Package</h3>
+            <p class="bundle-desc">Premium plaster for 2000 sq.ft</p>
+            <div class="bundle-includes">
+              <span><i class="fas fa-check"></i> Fine Sand - 4 tractors</span>
+              <span><i class="fas fa-check"></i> Cement - 60 bags</span>
+              <span><i class="fas fa-check"></i> Mesh Wire - 200m</span>
+            </div>
+            <div class="bundle-price">
+              <span class="price-label">Starting from</span>
+              <span class="price-value">₹32,000</span>
+            </div>
+            <button class="btn-primary-advanced magnetic-btn">
+              View Details <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+        <div class="bundle-back">
+          <h3>Package Details</h3>
+          <ul class="bundle-specs">
+            <li><strong>Coverage:</strong> 2000 sq.ft</li>
+            <li><strong>Finish:</strong> Premium smooth</li>
+            <li><strong>Delivery:</strong> 2-3 days</li>
+            <li><strong>Save:</strong> 18% discount</li>
+          </ul>
+          <div class="bundle-actions">
+            <button class="btn-primary-advanced" onclick="ShoppingCart.add('plastering')">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+            <button class="btn-secondary-advanced" onclick="BRICKNGO.customize('plastering')">
+              <i class="fas fa-sliders-h"></i> Customize
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Catalog Section -->
+  <section class="section products-catalog-section" id="products-catalog">
+    <div class="section-header-advanced">
+      <span class="section-label">OUR MATERIALS</span>
+      <h2 class="section-title-advanced">
+        <strong>Complete Building Materials Catalog</strong>
+      </h2>
+      <p class="section-subtitle-advanced">
+        Premium quality construction materials at competitive prices
+      </p>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="category-filters">
+      <button class="filter-btn active" data-category="all">
+        <i class="fas fa-th"></i> All Products
+      </button>
+      <button class="filter-btn" data-category="bricks">
+        <i class="fas fa-square"></i> Bricks
+      </button>
+      <button class="filter-btn" data-category="aggregates">
+        <i class="fas fa-mountain"></i> Aggregates
+      </button>
+      <button class="filter-btn" data-category="cement">
+        <i class="fas fa-box"></i> Cement & Sand
+      </button>
+      <button class="filter-btn" data-category="steel">
+        <i class="fas fa-wrench"></i> Steel & TMT
+      </button>
+    </div>
+
+    <div class="products-catalog-grid">
+      <!-- Red Bricks -->
+      <div class="product-card-advanced" data-category="bricks">
+        <div class="product-badge">BESTSELLER</div>
+        <div class="product-image-advanced">
+          <img src="/images/Premium Red Bricks.png" alt="Red Bricks">
+          <div class="product-quick-actions">
+            <button class="quick-btn" onclick="BRICKNGO.quickView('red-bricks')" data-tooltip="Quick View">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="quick-btn" onclick="ShoppingCart.add('red-bricks')" data-tooltip="Add to Cart">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="quick-btn" onclick="BRICKNGO.visualize3D('red-bricks')" data-tooltip="3D View">
+              <i class="fas fa-cube"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-content-advanced">
+          <div class="product-category-tag">Bricks</div>
+          <h3 class="product-title-advanced">Premium Red Bricks</h3>
+          <p class="product-description-advanced">High-quality clay fired bricks, perfect for walls</p>
+          <div class="product-specs">
+            <span><i class="fas fa-ruler"></i> 9" x 4" x 3"</span>
+            <span><i class="fas fa-weight"></i> 3 kg each</span>
+          </div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+            <span>(4.5 / 892 reviews)</span>
+          </div>
+          <div class="product-footer-advanced">
+            <div class="product-price-advanced">
+              <span class="price-main">₹8</span>
+              <span class="price-unit">per brick</span>
+              <span class="price-bulk">₹7,200/1000 pcs</span>
+            </div>
+            <button class="btn-add-to-cart magnetic-btn" onclick="ShoppingCart.add('red-bricks')">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fly Ash Bricks -->
+      <div class="product-card-advanced" data-category="bricks">
+        <div class="product-badge eco">ECO FRIENDLY</div>
+        <div class="product-image-advanced">
+          <img src="/images/Fly Ash Bricks.png" alt="Fly Ash Bricks">
+          <div class="product-quick-actions">
+            <button class="quick-btn" onclick="BRICKNGO.quickView('flyash-bricks')">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="quick-btn" onclick="ShoppingCart.add('flyash-bricks')">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="quick-btn" onclick="BRICKNGO.visualize3D('flyash-bricks')">
+              <i class="fas fa-cube"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-content-advanced">
+          <div class="product-category-tag eco">Eco Bricks</div>
+          <h3 class="product-title-advanced">Fly Ash Bricks</h3>
+          <p class="product-description-advanced">Eco-friendly, lightweight with excellent thermal insulation</p>
+          <div class="product-specs">
+            <span><i class="fas fa-ruler"></i> 9" x 4" x 3"</span>
+            <span><i class="fas fa-leaf"></i> Green Build</span>
+          </div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <span>(5.0 / 456 reviews)</span>
+          </div>
+          <div class="product-footer-advanced">
+            <div class="product-price-advanced">
+              <span class="price-main">₹6</span>
+              <span class="price-unit">per brick</span>
+              <span class="price-bulk">₹5,400/1000 pcs</span>
+            </div>
+            <button class="btn-add-to-cart magnetic-btn" onclick="ShoppingCart.add('flyash-bricks')">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AAC Blocks -->
+      <div class="product-card-advanced" data-category="bricks">
+        <div class="product-badge premium">PREMIUM</div>
+        <div class="product-image-advanced">
+          <img src="/images/AAC Blocks.png" alt="AAC Blocks">
+          <div class="product-quick-actions">
+            <button class="quick-btn" onclick="BRICKNGO.quickView('aac-blocks')">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="quick-btn" onclick="ShoppingCart.add('aac-blocks')">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="quick-btn" onclick="BRICKNGO.visualize3D('aac-blocks')">
+              <i class="fas fa-cube"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-content-advanced">
+          <div class="product-category-tag premium">Premium</div>
+          <h3 class="product-title-advanced">AAC Blocks</h3>
+          <p class="product-description-advanced">Autoclaved Aerated Concrete, lightweight & strong</p>
+          <div class="product-specs">
+            <span><i class="fas fa-ruler"></i> 24" x 8" x 4"</span>
+            <span><i class="fas fa-fire"></i> Fire Resistant</span>
+          </div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+            <span>(4.7 / 324 reviews)</span>
+          </div>
+          <div class="product-footer-advanced">
+            <div class="product-price-advanced">
+              <span class="price-main">₹65</span>
+              <span class="price-unit">per block</span>
+              <span class="price-bulk">₹58,500/1000 blocks</span>
+            </div>
+            <button class="btn-add-to-cart magnetic-btn" onclick="ShoppingCart.add('aac-blocks')">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 20mm Kankar -->
+      <div class="product-card-advanced" data-category="aggregates">
+        <div class="product-image-advanced">
+          <img src="/images/20mm Kankar (Aggregate).png" alt="20mm Kankar">
+          <div class="product-quick-actions">
+            <button class="quick-btn" onclick="BRICKNGO.quickView('kankar-20mm')">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="quick-btn" onclick="ShoppingCart.add('kankar-20mm')">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="quick-btn" onclick="BRICKNGO.visualize3D('kankar-20mm')">
+              <i class="fas fa-cube"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-content-advanced">
+          <div class="product-category-tag">Aggregates</div>
+          <h3 class="product-title-advanced">20mm Kankar</h3>
+          <p class="product-description-advanced">High-quality crushed stone for concrete mixing</p>
+          <div class="product-specs">
+            <span><i class="fas fa-truck-loading"></i> Per Load</span>
+            <span><i class="fas fa-mountain"></i> Grade A</span>
+          </div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <span>(4.8 / 672 reviews)</span>
+          </div>
+          <div class="product-footer-advanced">
+            <div class="product-price-advanced">
+              <span class="price-main">₹2,800</span>
+              <span class="price-unit">per load</span>
+              <span class="price-bulk">10 tons approx</span>
+            </div>
+            <button class="btn-add-to-cart magnetic-btn" onclick="ShoppingCart.add('kankar-20mm')">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- River Sand -->
+      <div class="product-card-advanced" data-category="cement">
+        <div class="product-image-advanced">
+          <img src="/images/Premium River Sand.png" alt="River Sand">
+          <div class="product-quick-actions">
+            <button class="quick-btn" onclick="BRICKNGO.quickView('river-sand')">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="quick-btn" onclick="ShoppingCart.add('river-sand')">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="quick-btn" onclick="BRICKNGO.visualize3D('river-sand')">
+              <i class="fas fa-cube"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-content-advanced">
+          <div class="product-category-tag">Sand</div>
+          <h3 class="product-title-advanced">Premium River Sand</h3>
+          <p class="product-description-advanced">Clean washed river sand for construction</p>
+          <div class="product-specs">
+            <span><i class="fas fa-tractor"></i> Per Tractor</span>
+            <span><i class="fas fa-water"></i> Washed</span>
+          </div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+            <span>(4.6 / 534 reviews)</span>
+          </div>
+          <div class="product-footer-advanced">
+            <div class="product-price-advanced">
+              <span class="price-main">₹1,200</span>
+              <span class="price-unit">per tractor</span>
+              <span class="price-bulk">80 cubic ft</span>
+            </div>
+            <button class="btn-add-to-cart magnetic-btn" onclick="ShoppingCart.add('river-sand')">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- M Sand -->
+      <div class="product-card-advanced" data-category="cement">
+        <div class="product-badge">POPULAR</div>
+        <div class="product-image-advanced">
+          <img src="/images/M Sand (Manufactured Sand).png" alt="M Sand">
+          <div class="product-quick-actions">
+            <button class="quick-btn" onclick="BRICKNGO.quickView('m-sand')">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="quick-btn" onclick="ShoppingCart.add('m-sand')">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="quick-btn" onclick="BRICKNGO.visualize3D('m-sand')">
+              <i class="fas fa-cube"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-content-advanced">
+          <div class="product-category-tag">Sand</div>
+          <h3 class="product-title-advanced">M Sand (Manufactured)</h3>
+          <p class="product-description-advanced">Consistent quality manufactured sand</p>
+          <div class="product-specs">
+            <span><i class="fas fa-tractor"></i> Per Tractor</span>
+            <span><i class="fas fa-certificate"></i> ISI Certified</span>
+          </div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <span>(4.9 / 789 reviews)</span>
+          </div>
+          <div class="product-footer-advanced">
+            <div class="product-price-advanced">
+              <span class="price-main">₹1,000</span>
+              <span class="price-unit">per tractor</span>
+              <span class="price-bulk">80 cubic ft</span>
+            </div>
+            <button class="btn-add-to-cart magnetic-btn" onclick="ShoppingCart.add('m-sand')">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- UltraTech Cement -->
+      <div class="product-card-advanced" data-category="cement">
+        <div class="product-badge premium">PREMIUM</div>
+        <div class="product-image-advanced">
+          <img src="/images/UltraTech OPC 53 Grade Cement.png" alt="UltraTech Cement">
+          <div class="product-quick-actions">
+            <button class="quick-btn" onclick="BRICKNGO.quickView('ultratech-cement')">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="quick-btn" onclick="ShoppingCart.add('ultratech-cement')">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="quick-btn" onclick="BRICKNGO.visualize3D('ultratech-cement')">
+              <i class="fas fa-cube"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-content-advanced">
+          <div class="product-category-tag premium">Premium Cement</div>
+          <h3 class="product-title-advanced">UltraTech OPC 53 Grade</h3>
+          <p class="product-description-advanced">High-strength cement for superior concrete</p>
+          <div class="product-specs">
+            <span><i class="fas fa-box"></i> 50 kg bag</span>
+            <span><i class="fas fa-certificate"></i> BIS Certified</span>
+          </div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <span>(5.0 / 1234 reviews)</span>
+          </div>
+          <div class="product-footer-advanced">
+            <div class="product-price-advanced">
+              <span class="price-main">₹380</span>
+              <span class="price-unit">per bag</span>
+              <span class="price-bulk">Min order: 10 bags</span>
+            </div>
+            <button class="btn-add-to-cart magnetic-btn" onclick="ShoppingCart.add('ultratech-cement')">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TMT Bars -->
+      <div class="product-card-advanced" data-category="steel">
+        <div class="product-badge">BESTSELLER</div>
+        <div class="product-image-advanced">
+          <img src="/images/TMT Bars Fe 500D.png" alt="TMT Bars">
+          <div class="product-quick-actions">
+            <button class="quick-btn" onclick="BRICKNGO.quickView('tmt-bars')">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="quick-btn" onclick="ShoppingCart.add('tmt-bars')">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="quick-btn" onclick="BRICKNGO.visualize3D('tmt-bars')">
+              <i class="fas fa-cube"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-content-advanced">
+          <div class="product-category-tag">Steel</div>
+          <h3 class="product-title-advanced">TMT Bars Fe 500D</h3>
+          <p class="product-description-advanced">High-grade corrosion resistant steel bars</p>
+          <div class="product-specs">
+            <span><i class="fas fa-ruler"></i> 8mm to 32mm</span>
+            <span><i class="fas fa-shield-alt"></i> Fe 500D</span>
+          </div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+            <span>(4.7 / 445 reviews)</span>
+          </div>
+          <div class="product-footer-advanced">
+            <div class="product-price-advanced">
+              <span class="price-main">₹52</span>
+              <span class="price-unit">per kg</span>
+              <span class="price-bulk">Min order: 100 kg</span>
+            </div>
+            <button class="btn-add-to-cart magnetic-btn" onclick="ShoppingCart.add('tmt-bars')">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10mm Kankar -->
+      <div class="product-card-advanced" data-category="aggregates">
+        <div class="product-image-advanced">
+          <img src="/images/10mm Kankar (Aggregate).png" alt="10mm Kankar">
+          <div class="product-quick-actions">
+            <button class="quick-btn" onclick="BRICKNGO.quickView('kankar-10mm')">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="quick-btn" onclick="ShoppingCart.add('kankar-10mm')">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="quick-btn" onclick="BRICKNGO.visualize3D('kankar-10mm')">
+              <i class="fas fa-cube"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-content-advanced">
+          <div class="product-category-tag">Aggregates</div>
+          <h3 class="product-title-advanced">10mm Kankar</h3>
+          <p class="product-description-advanced">Fine aggregate for finishing work</p>
+          <div class="product-specs">
+            <span><i class="fas fa-truck-loading"></i> Per Load</span>
+            <span><i class="fas fa-mountain"></i> Grade A</span>
+          </div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+            <span>(4.5 / 423 reviews)</span>
+          </div>
+          <div class="product-footer-advanced">
+            <div class="product-price-advanced">
+              <span class="price-main">₹2,600</span>
+              <span class="price-unit">per load</span>
+              <span class="price-bulk">10 tons approx</span>
+            </div>
+            <button class="btn-add-to-cart magnetic-btn" onclick="ShoppingCart.add('kankar-10mm')">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hollow Blocks -->
+      <div class="product-card-advanced" data-category="bricks">
+        <div class="product-image-advanced">
+          <img src="/images/Concrete Hollow Blocks.png" alt="Hollow Blocks">
+          <div class="product-quick-actions">
+            <button class="quick-btn" onclick="BRICKNGO.quickView('hollow-blocks')">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="quick-btn" onclick="ShoppingCart.add('hollow-blocks')">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="quick-btn" onclick="BRICKNGO.visualize3D('hollow-blocks')">
+              <i class="fas fa-cube"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-content-advanced">
+          <div class="product-category-tag">Blocks</div>
+          <h3 class="product-title-advanced">Concrete Hollow Blocks</h3>
+          <p class="product-description-advanced">Durable load-bearing blocks</p>
+          <div class="product-specs">
+            <span><i class="fas fa-ruler"></i> 16" x 8" x 8"</span>
+            <span><i class="fas fa-weight"></i> 14 kg each</span>
+          </div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+            <span>(4.2 / 267 reviews)</span>
+          </div>
+          <div class="product-footer-advanced">
+            <div class="product-price-advanced">
+              <span class="price-main">₹35</span>
+              <span class="price-unit">per block</span>
+              <span class="price-bulk">₹31,500/1000 blocks</span>
+            </div>
+            <button class="btn-add-to-cart magnetic-btn" onclick="ShoppingCart.add('hollow-blocks')">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Birla White Cement -->
+      <div class="product-card-advanced" data-category="cement">
+        <div class="product-badge premium">PREMIUM</div>
+        <div class="product-image-advanced">
+          <img src="/images/Birla White Cement.png" alt="White Cement">
+          <div class="product-quick-actions">
+            <button class="quick-btn" onclick="BRICKNGO.quickView('white-cement')">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="quick-btn" onclick="ShoppingCart.add('white-cement')">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="quick-btn" onclick="BRICKNGO.visualize3D('white-cement')">
+              <i class="fas fa-cube"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-content-advanced">
+          <div class="product-category-tag premium">Premium</div>
+          <h3 class="product-title-advanced">Birla White Cement</h3>
+          <p class="product-description-advanced">Premium white cement for finishing</p>
+          <div class="product-specs">
+            <span><i class="fas fa-box"></i> 40 kg bag</span>
+            <span><i class="fas fa-paint-brush"></i> Wall Care</span>
+          </div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <span>(5.0 / 598 reviews)</span>
+          </div>
+          <div class="product-footer-advanced">
+            <div class="product-price-advanced">
+              <span class="price-main">₹560</span>
+              <span class="price-unit">per bag</span>
+              <span class="price-bulk">Min order: 5 bags</span>
+            </div>
+            <button class="btn-add-to-cart magnetic-btn" onclick="ShoppingCart.add('white-cement')">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Binding Wire -->
+      <div class="product-card-advanced" data-category="steel">
+        <div class="product-image-advanced">
+          <img src="/images/Binding Wire.png" alt="Binding Wire">
+          <div class="product-quick-actions">
+            <button class="quick-btn" onclick="BRICKNGO.quickView('binding-wire')">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="quick-btn" onclick="ShoppingCart.add('binding-wire')">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="quick-btn" onclick="BRICKNGO.visualize3D('binding-wire')">
+              <i class="fas fa-cube"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-content-advanced">
+          <div class="product-category-tag">Steel</div>
+          <h3 class="product-title-advanced">Binding Wire</h3>
+          <p class="product-description-advanced">Galvanized binding wire for reinforcement</p>
+          <div class="product-specs">
+            <span><i class="fas fa-tape"></i> 20-25 kg roll</span>
+            <span><i class="fas fa-shield-alt"></i> Galvanized</span>
+          </div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+            <span>(4.3 / 178 reviews)</span>
+          </div>
+          <div class="product-footer-advanced">
+            <div class="product-price-advanced">
+              <span class="price-main">₹48</span>
+              <span class="price-unit">per kg</span>
+              <span class="price-bulk">Min order: 20 kg</span>
+            </div>
+            <button class="btn-add-to-cart magnetic-btn" onclick="ShoppingCart.add('binding-wire')">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load More Button -->
+    <div class="load-more-container">
+      <button class="btn-load-more magnetic-btn">
+        <i class="fas fa-sync-alt"></i> Load More Products
+      </button>
+      <p class="products-count">Showing 12 of 50+ products</p>
+    </div>
+  </section>
+
+  <!-- Material Calculator Section -->
+  <section class="section calculator-section" id="calculator">
+    <div class="section-header-advanced">
+      <span class="section-label">SMART TOOLS</span>
+      <h2 class="section-title-advanced">
+        <strong>Material Calculator</strong>
+      </h2>
+      <p class="section-subtitle-advanced">
+        Calculate exact quantities and get instant pricing
+      </p>
+    </div>
+
+    <div class="calculator-container">
+      <div class="calculator-card glass-morphism">
+        <div class="calculator-tabs">
+          <button class="calc-tab active" data-calc="bricks">
+            <i class="fas fa-th"></i> Bricks
+          </button>
+          <button class="calc-tab" data-calc="sand">
+            <i class="fas fa-mountain"></i> Sand
+          </button>
+          <button class="calc-tab" data-calc="concrete">
+            <i class="fas fa-cube"></i> Concrete
+          </button>
+          <button class="calc-tab" data-calc="paint">
+            <i class="fas fa-paint-roller"></i> Paint
+          </button>
+        </div>
+
+        <div class="calculator-form" id="bricksCalc">
+          <h3>Calculate Bricks Required</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Wall Length (feet)</label>
+              <input type="number" id="wallLength" placeholder="20" class="calc-input">
+            </div>
+            <div class="form-group">
+              <label>Wall Height (feet)</label>
+              <input type="number" id="wallHeight" placeholder="10" class="calc-input">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Wall Thickness</label>
+              <select id="wallThickness" class="calc-select">
+                <option value="4">4 inches (half brick)</option>
+                <option value="9" selected>9 inches (full brick)</option>
+                <option value="13">13 inches (1.5 brick)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Brick Size</label>
+              <select id="brickSize" class="calc-select">
+                <option value="standard" selected>Standard (9x3x4)</option>
+                <option value="modular">Modular (7.5x3.5x2.5)</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn-calculate magnetic-btn" onclick="BRICKNGO.calculate('bricks')">
+            <i class="fas fa-calculator"></i> Calculate Now
+          </button>
+        </div>
+
+        <div class="calculator-result" id="calcResult" style="display: none;">
+          <div class="result-header">
+            <i class="fas fa-check-circle"></i>
+            <h3>Your Calculation Result</h3>
+          </div>
+          <div class="result-grid">
+            <div class="result-item">
+              <div class="result-icon">
+                <i class="fas fa-th"></i>
+              </div>
+              <div class="result-content">
+                <span class="result-label">Bricks Required</span>
+                <span class="result-value" id="bricksQty">4,500</span>
+              </div>
+            </div>
+            <div class="result-item">
+              <div class="result-icon">
+                <i class="fas fa-money-bill-wave"></i>
+              </div>
+              <div class="result-content">
+                <span class="result-label">Estimated Cost</span>
+                <span class="result-value" id="estimatedCost">₹31,500</span>
+              </div>
+            </div>
+            <div class="result-item">
+              <div class="result-icon">
+                <i class="fas fa-truck"></i>
+              </div>
+              <div class="result-content">
+                <span class="result-label">Delivery Loads</span>
+                <span class="result-value" id="deliveryLoads">2 trips</span>
+              </div>
+            </div>
+            <div class="result-item">
+              <div class="result-icon">
+                <i class="fas fa-box"></i>
+              </div>
+              <div class="result-content">
+                <span class="result-label">Space Required</span>
+                <span class="result-value" id="spaceRequired">45 cu.ft</span>
+              </div>
+            </div>
+          </div>
+          <div class="result-actions">
+            <button class="btn-primary-advanced" onclick="BRICKNGO.addCalculatedToCart()">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+            <button class="btn-secondary-advanced" onclick="BRICKNGO.downloadPDF()">
+              <i class="fas fa-download"></i> Save as PDF
+            </button>
+            <button class="btn-secondary-advanced" onclick="BRICKNGO.visualize3D()">
+              <i class="fas fa-cube"></i> 3D Visualizer
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D Volume Visualizer -->
+      <div class="visualizer-3d glass-morphism">
+        <h3>3D Volume Visualizer</h3>
+        <div class="visualizer-canvas" id="volumeVisualizer">
+          <div class="pile-visualization">
+            <div class="pile-3d">
+              <i class="fas fa-cubes"></i>
+            </div>
+            <div class="pile-dimensions">
+              <span>L: <strong>8ft</strong></span>
+              <span>W: <strong>6ft</strong></span>
+              <span>H: <strong>4ft</strong></span>
+            </div>
+          </div>
+        </div>
+        <p class="visualizer-note">
+          <i class="fas fa-info-circle"></i>
+          This shows approximately how much space your materials will occupy
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Tracking Section -->
+  <section class="section tracking-section" id="tracking">
+    <div class="section-header-advanced">
+      <span class="section-label">REAL-TIME TRACKING</span>
+      <h2 class="section-title-advanced">
+        <strong>Track Your Delivery</strong>
+      </h2>
+      <p class="section-subtitle-advanced">
+        GPS tracking with live location updates
+      </p>
+    </div>
+
+    <div class="tracking-container">
+      <div class="tracking-input-card glass-morphism">
+        <h3>Enter Order ID or Mobile Number</h3>
+        <div class="tracking-input-group">
+          <input type="text" placeholder="Order ID or +91-XXXXXXXXXX" class="tracking-input" id="trackingInput">
+          <button class="btn-track magnetic-btn" onclick="BRICKNGO.trackOrder()">
+            <i class="fas fa-search"></i> Track
+          </button>
+        </div>
+      </div>
+
+      <div class="tracking-map-card glass-morphism" id="trackingMapCard" style="display: none;">
+        <div class="tracking-status-bar">
+          <div class="status-item active">
+            <i class="fas fa-check-circle"></i>
+            <span>Order Placed</span>
+          </div>
+          <div class="status-item active">
+            <i class="fas fa-box"></i>
+            <span>Loaded</span>
+          </div>
+          <div class="status-item active">
+            <i class="fas fa-truck"></i>
+            <span>In Transit</span>
+          </div>
+          <div class="status-item">
+            <i class="fas fa-home"></i>
+            <span>Delivered</span>
+          </div>
+        </div>
+        
+        <div class="tracking-map" id="trackingMap">
+          <!-- Google Maps or custom map will be rendered here -->
+          <div class="map-placeholder">
+            <i class="fas fa-map-marked-alt"></i>
+            <p>Your driver is <strong>2.5 km</strong> away</p>
+            <p class="eta">Estimated arrival: <strong>15 minutes</strong></p>
+          </div>
+        </div>
+
+        <div class="driver-info">
+          <div class="driver-avatar">
+            <img src="https://i.pravatar.cc/100?img=33" alt="Driver">
+            <div class="driver-status online"></div>
+          </div>
+          <div class="driver-details">
+            <h4>Rajesh Kumar</h4>
+            <div class="driver-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+              <span>4.8</span>
+            </div>
+            <p>Vehicle: TG-12-AB-1234</p>
+          </div>
+          <div class="driver-actions">
+            <button class="btn-icon" onclick="BRICKNGO.callDriver()">
+              <i class="fas fa-phone"></i>
+            </button>
+            <button class="btn-icon" onclick="BRICKNGO.messageDriver()">
+              <i class="fas fa-comment"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Service Area Map -->
+  <section class="section service-area-section">
+    <div class="section-header-advanced">
+      <span class="section-label">DELIVERY ZONES</span>
+      <h2 class="section-title-advanced">
+        <strong>We Deliver Across Hyderabad</strong>
+      </h2>
+      <p class="section-subtitle-advanced">
+        Check if we deliver to your area
+      </p>
+    </div>
+
+    <div class="service-area-container">
+      <div class="postcode-checker glass-morphism">
+        <h3>Check Delivery Availability</h3>
+        <div class="postcode-input-group">
+          <input type="text" placeholder="Enter your postcode" class="postcode-input" id="postcodeInput">
+          <button class="btn-check magnetic-btn" onclick="BRICKNGO.checkDelivery()">
+            Check
+          </button>
+        </div>
+        <div class="postcode-result" id="postcodeResult" style="display: none;">
+          <div class="result-success">
+            <i class="fas fa-check-circle"></i>
+            <h4>Great News!</h4>
+            <p>We deliver to your area</p>
+            <div class="delivery-details">
+              <div class="detail-item">
+                <i class="fas fa-clock"></i>
+                <span>Same-day delivery available</span>
+              </div>
+              <div class="detail-item">
+                <i class="fas fa-shipping-fast"></i>
+                <span>Free delivery on orders above ₹10,000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="interactive-map glass-morphism">
+        <div class="map-zones">
+          <div class="zone zone-1" data-zone="Central Hyderabad">
+            <span class="zone-label">Central</span>
+          </div>
+          <div class="zone zone-2" data-zone="Secunderabad">
+            <span class="zone-label">Secunderabad</span>
+          </div>
+          <div class="zone zone-3" data-zone="Gachibowli">
+            <span class="zone-label">Gachibowli</span>
+          </div>
+          <div class="zone zone-4" data-zone="Madhapur">
+            <span class="zone-label">Madhapur</span>
+          </div>
+        </div>
+        <div class="map-legend">
+          <span><div class="legend-color" style="background: #10b981;"></div> Same-day</span>
+          <span><div class="legend-color" style="background: #f59e0b;"></div> Next-day</span>
+          <span><div class="legend-color" style="background: #ef4444;"></div> 2-3 days</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Customer Projects Gallery -->
+  <section class="section projects-section">
+    <div class="section-header-advanced">
+      <span class="section-label">CUSTOMER SUCCESS</span>
+      <h2 class="section-title-advanced">
+        <strong>Real Projects, Real Results</strong>
+      </h2>
+      <p class="section-subtitle-advanced">
+        See what our customers are building
+      </p>
+    </div>
+
+    <div class="projects-gallery">
+      <div class="project-card before-after-card">
+        <div class="project-images">
+          <div class="image-slider">
+            <div class="before-image">
+              <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&h=400&fit=crop" alt="Before">
+              <span class="image-label">Before</span>
+            </div>
+            <div class="after-image">
+              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop" alt="After">
+              <span class="image-label">After</span>
+            </div>
+            <div class="slider-handle"></div>
+          </div>
+        </div>
+        <div class="project-info">
+          <h4>Villa Construction - Jubilee Hills</h4>
+          <p>3BHK villa built using our Foundation + Wall packages</p>
+          <div class="project-meta">
+            <span><i class="fas fa-user"></i> Mr. Sharma</span>
+            <span><i class="fas fa-calendar"></i> 6 months ago</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card video-card">
+        <div class="video-thumbnail">
+          <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&h=400&fit=crop" alt="Video">
+          <div class="play-button">
+            <i class="fas fa-play"></i>
+          </div>
+          <div class="video-duration">2:45</div>
+        </div>
+        <div class="project-info">
+          <h4>Apartment Complex - Gachibowli</h4>
+          <p>Testimonial from construction manager</p>
+          <div class="project-meta">
+            <span><i class="fas fa-eye"></i> 1.2k views</span>
+            <span><i class="fas fa-star"></i> 4.9 rating</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card image-card">
+        <div class="project-image">
+          <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&h=400&fit=crop" alt="Modern House">
+        </div>
+        <div class="project-info">
+          <h4>Modern Home - Kondapur</h4>
+          <p>Premium bricks & sand delivered in 24 hours</p>
+          <div class="project-meta">
+            <span><i class="fas fa-heart"></i> 342 likes</span>
+            <span><i class="fas fa-share"></i> Share</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Educational Content -->
+  <section class="section education-section">
+    <div class="section-header-advanced">
+      <span class="section-label">LEARN & BUILD</span>
+      <h2 class="section-title-advanced">
+        <strong>Construction Guides & Tips</strong>
+      </h2>
+      <p class="section-subtitle-advanced">
+        Expert advice for your building projects
+      </p>
+    </div>
+
+    <div class="education-grid">
+      <div class="guide-card glass-morphism">
+        <div class="guide-icon">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+        <h3>How to Calculate Bricks</h3>
+        <p>Step-by-step guide to estimate brick quantities</p>
+        <button class="btn-link">
+          Watch Video <i class="fas fa-play-circle"></i>
+        </button>
+      </div>
+
+      <div class="guide-card glass-morphism">
+        <div class="guide-icon">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <h3>Sand Types Explained</h3>
+        <p>Choose the right sand for your project</p>
+        <button class="btn-link">
+          Read Article <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <div class="guide-card glass-morphism">
+        <div class="guide-icon">
+          <i class="fas fa-tools"></i>
+        </div>
+        <h3>Foundation Best Practices</h3>
+        <p>Ensure strong foundations with expert tips</p>
+        <button class="btn-link">
+          Download PDF <i class="fas fa-download"></i>
+        </button>
+      </div>
+
+      <div class="guide-card glass-morphism">
+        <div class="guide-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>Cost Estimation Guide</h3>
+        <p>Budget planning for construction projects</p>
+        <button class="btn-link">
+          Use Calculator <i class="fas fa-calculator"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Indicators -->
+  <section class="section trust-section">
+    <div class="trust-grid">
+      <div class="trust-card glass-morphism">
+        <div class="trust-icon">
+          <i class="fas fa-certificate"></i>
+        </div>
+        <h3>Quality Certified</h3>
+        <p>All materials tested & verified</p>
+        <button class="btn-verify" onclick="BRICKNGO.verifyQuality()">
+          Verify Certificate
+        </button>
+      </div>
+
+      <div class="trust-card glass-morphism">
+        <div class="trust-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3>100% Genuine</h3>
+        <p>Authentic materials guarantee</p>
+        <div class="trust-badge">
+          <i class="fas fa-check-circle"></i> Verified
+        </div>
+      </div>
+
+      <div class="trust-card glass-morphism">
+        <div class="trust-icon">
+          <i class="fas fa-truck-loading"></i>
+        </div>
+        <h3>Timely Delivery</h3>
+        <p>98.5% on-time delivery rate</p>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 98.5%;"></div>
+        </div>
+      </div>
+
+      <div class="trust-card glass-morphism">
+        <div class="trust-icon">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h3>24/7 Support</h3>
+        <p>Always here to help you</p>
+        <button class="btn-support" onclick="BRICKNGO.openChat()">
+          Chat Now
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Material Comparison Tool -->
+  <section class="section comparison-section">
+    <div class="section-header-advanced">
+      <span class="section-label">COMPARE & CHOOSE</span>
+      <h2 class="section-title-advanced">
+        <strong>Material Comparison Tool</strong>
+      </h2>
+      <p class="section-subtitle-advanced">
+        Side-by-side specifications to help you decide
+      </p>
+    </div>
+
+    <div class="comparison-container">
+      <div class="comparison-table glass-morphism">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Red Bricks</th>
+              <th>Fly Ash Bricks</th>
+              <th>Wire Cut Bricks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Price</td>
+              <td>₹7/brick</td>
+              <td>₹6.5/brick</td>
+              <td>₹9/brick</td>
+            </tr>
+            <tr>
+              <td>Strength</td>
+              <td><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></td>
+              <td><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></td>
+              <td><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></td>
+            </tr>
+            <tr>
+              <td>Water Absorption</td>
+              <td>15-20%</td>
+              <td>8-12%</td>
+              <td>5-8%</td>
+            </tr>
+            <tr>
+              <td>Eco-Friendly</td>
+              <td><i class="fas fa-check text-success"></i></td>
+              <td><i class="fas fa-check-double text-success"></i></td>
+              <td><i class="fas fa-check text-success"></i></td>
+            </tr>
+            <tr>
+              <td>Best For</td>
+              <td>General construction</td>
+              <td>Budget projects</td>
+              <td>Premium finish</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Action Buttons -->
+  <div class="fab-container">
+    <button class="fab fab-main magnetic-btn" onclick="BRICKNGO.toggleFAB()">
+      <i class="fas fa-plus"></i>
+    </button>
+    <div class="fab-actions" id="fabActions">
+      <button class="fab fab-action" data-tooltip="WhatsApp" onclick="BRICKNGO.openWhatsApp()">
+        <i class="fab fa-whatsapp"></i>
+      </button>
+      <button class="fab fab-action" data-tooltip="Call Us" onclick="BRICKNGO.callUs()">
+        <i class="fas fa-phone"></i>
+      </button>
+      <button class="fab fab-action" data-tooltip="Cart" onclick="BRICKNGO.openCart()">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge">3</span>
+      </button>
+      <button class="fab fab-action" data-tooltip="AR View" onclick="BRICKNGO.openAR()">
+        <i class="fas fa-cube"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Shopping Cart Sidebar -->
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>Shopping Cart</h3>
+      <button class="cart-close" onclick="BRICKNGO.closeCart()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="cart-items">
+      <div class="cart-item">
+        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=100&h=100&fit=crop" alt="Bricks">
+        <div class="cart-item-details">
+          <h4>Red Bricks</h4>
+          <p>1000 pieces</p>
+          <div class="cart-item-price">₹7,000</div>
+        </div>
+        <button class="cart-item-remove">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total:</span>
+        <strong>₹24,500</strong>
+      </div>
+      <button class="btn-checkout magnetic-btn">
+        Proceed to Checkout <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Exit Intent Popup -->
+  <div class="exit-popup" id="exitPopup">
+    <div class="popup-content glass-morphism">
+      <button class="popup-close" onclick="BRICKNGO.closeExitPopup()">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="popup-icon">
+        <i class="fas fa-gift"></i>
+      </div>
+      <h2>Wait! Don't Leave Yet</h2>
+      <p>Get <strong>10% OFF</strong> on your first order</p>
+      <div class="popup-form">
+        <input type="email" placeholder="Enter your email" class="popup-input">
+        <button class="btn-primary-advanced">
+          Get Discount
+        </button>
+      </div>
+      <p class="popup-note">Limited time offer • Valid for orders above ₹10,000</p>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer -->
+  <footer class="footer-advanced">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3 class="footer-logo gradient-text-advanced">BRICKNGO</h3>
+        <p>Smart building materials delivery platform for modern construction</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <a href="#products">Products</a>
+        <a href="#calculator">Calculator</a>
+        <a href="#tracking">Track Order</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-section">
+        <h4>Services</h4>
+        <a href="#">Bulk Orders</a>
+        <a href="#">B2B Portal</a>
+        <a href="#">Project Packages</a>
+        <a href="#">AR Visualizer</a>
+      </div>
+      <div class="footer-section">
+        <h4>Download App</h4>
+        <a href="#" class="app-button">
+          <i class="fab fa-google-play"></i> Play Store
+        </a>
+        <a href="#" class="app-button">
+          <i class="fab fa-apple"></i> App Store
+        </a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 BRICKNGO. All rights reserved.</p>
+      <div class="footer-badges">
+        <img src="https://img.shields.io/badge/Secure-SSL-green" alt="SSL">
+        <img src="https://img.shields.io/badge/Payment-Secure-blue" alt="Payment">
+      </div>
+    </div>
+  </footer>
+
+  <!-- PWA Install Prompt -->
+  <div class="pwa-install-prompt" id="pwaPrompt" style="display: none;">
+    <div class="pwa-content">
+      <i class="fas fa-mobile-alt"></i>
+      <div>
+        <h4>Install BRICKNGO App</h4>
+        <p>Get faster access and offline browsing</p>
+      </div>
+      <button class="btn-install" onclick="BRICKNGO.installPWA()">Install</button>
+      <button class="btn-dismiss" onclick="BRICKNGO.dismissPWA()">×</button>
+    </div>
+  </div>
+
+  <script src="/script-advanced.js"></script>
+  <script src="/cart.js"></script>
+  <script src="/js/shop-client.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/session-manager.js"></script>
+  <script>
+    // Initialize and update navbar on page load
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (typeof sessionManager !== 'undefined') {
+        await sessionManager.init();
+        updateHomeNavbar();
+      }
+    });
+    
+    // Update home page navbar
+    function updateHomeNavbar() {
+      const user = sessionManager.getUser();
+      const cartCount = sessionManager.getCartCount();
+      
+      // Update cart badge
+      const cartBadge = document.getElementById('homeCartBadge');
+      if (cartBadge && cartCount > 0) {
+        cartBadge.textContent = cartCount;
+        cartBadge.style.display = 'block';
+      }
+      
+      // Update profile section
+      const profileSection = document.getElementById('homeUserProfile');
+      const userName = document.getElementById('homeUserName');
+      const authBtn = document.getElementById('homeAuthBtn');
+      
+      if (user) {
+        // Show user profile section
+        if (profileSection) {
+          profileSection.style.display = 'flex';
+          profileSection.onclick = async (e) => {
+            e.preventDefault();
+            if (confirm('Do you want to logout?')) {
+              await sessionManager.logout();
+              window.location.href = '/';
+            }
+          };
+        }
+        
+        // Update user name
+        if (userName) {
+          userName.textContent = user.name || 'User';
+        }
+        
+        // Change button to logout
+        if (authBtn) {
+          authBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+          authBtn.setAttribute('data-tooltip', 'Logout');
+          authBtn.onclick = async (e) => {
+            e.preventDefault();
+            await sessionManager.logout();
+            window.location.href = '/';
+          };
+        }
+      } else {
+        // Hide profile section
+        if (profileSection) {
+          profileSection.style.display = 'none';
+        }
+        
+        // Show login button
+        if (authBtn) {
+          authBtn.innerHTML = '<i class="fas fa-user"></i>';
+          authBtn.setAttribute('data-tooltip', 'Login / Signup');
+          authBtn.href = '/login';
+          authBtn.onclick = null;
+        }
+      }
+    }
+    
+    // Override the old ShoppingCart.add to use the new API
+    if (typeof ShoppingCart !== 'undefined') {
+      ShoppingCart.add = async function(productId) {
+        try {
+          console.log('🛒 Adding product to cart:', productId);
+          
+          const response = await fetch('/api/cart/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ productId, quantity: 1 })
+          });
+
+          console.log('📦 Response status:', response.status);
+          
+          const data = await response.json();
+          console.log('📦 Response data:', data);
+
+          if (!response.ok) {
+            if (response.status === 401) {
+              alert('❌ Please login to add items to cart');
+              window.location.href = '/login';
+              return;
+            }
+            throw new Error(data.message || 'Failed to add to cart');
+          }
+
+          alert('✅ Product added to cart!');
+          // Update cart badge using session manager
+          if (typeof sessionManager !== 'undefined') {
+            await sessionManager.loadCartCount();
+            updateHomeNavbar(); // Update navbar display
+          }
+        } catch (error) {
+          console.error('❌ Failed to add to cart:', error);
+          alert('❌ ' + error.message);
+        }
+      };
+    }
+
+    // Scroll to products section when Shop button is clicked
+    function scrollToProducts(event) {
+      event.preventDefault();
+      const productsSection = document.getElementById('products-catalog');
+      if (productsSection) {
+        productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  </script>
+  
+  <!-- API Configuration -->
+  <script src="/js/api-config.js"></script>
+  
+  <!-- Search System Script -->
+  <script src="/js/search.js"></script>
+</body>
+</html>
