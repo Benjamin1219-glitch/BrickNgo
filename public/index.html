@@ -1759,21 +1759,6 @@
       
       if (typeof sessionManager !== 'undefined') {
         await sessionManager.init();
-        
-        // Also check localStorage as fallback
-        if (!sessionManager.getUser()) {
-          const storedUser = localStorage.getItem('user');
-          if (storedUser) {
-            try {
-              sessionManager.user = JSON.parse(storedUser);
-              sessionManager.isAuthenticated = true;
-              console.log('✅ User loaded from localStorage:', sessionManager.user.name);
-            } catch (e) {
-              console.error('Error parsing stored user:', e);
-            }
-          }
-        }
-        
         updateHomeNavbar();
       }
     });

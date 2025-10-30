@@ -16,12 +16,21 @@ class SessionManager {
    */
   async init() {
     try {
+      // Get token from localStorage if available
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      
+      // Add token to headers if available
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
       const response = await fetch(`${this.API_URL}/api/auth/me`, {
         method: 'GET',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        headers: headers
       });
 
       if (response.ok) {
@@ -35,23 +44,58 @@ class SessionManager {
           await this.loadCartCount();
           console.log('✅ User session loaded:', this.user.name);
         } else {
+          // If API call failed but we have user in localStorage, use it temporarily
+          const storedUser = localStorage.getItem('user');
+          if (storedUser) {
+            this.user = JSON.parse(storedUser);
+            this.isAuthenticated = true;
+            this.updateUI();
+            console.log('ℹ️ Using cached user data');
+          } else {
+            this.user = null;
+            this.isAuthenticated = false;
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            this.updateUI();
+          }
+        }
+      } else {
+        // If API call failed but we have user in localStorage, use it temporarily
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          this.user = JSON.parse(storedUser);
+          this.isAuthenticated = true;
+          this.updateUI();
+          console.log('ℹ️ Using cached user data (API unavailable)');
+        } else {
           this.user = null;
           this.isAuthenticated = false;
           localStorage.removeItem('user');
+          localStorage.removeItem('token');
           this.updateUI();
+          console.log('ℹ️ No active session');
         }
-      } else {
-        this.user = null;
-        this.isAuthenticated = false;
-        localStorage.removeItem('user');
-        this.updateUI();
-        console.log('ℹ️ No active session');
       }
     } catch (error) {
       console.error('Session init error:', error);
-      this.isAuthenticated = false;
-      localStorage.removeItem('user');
-      this.updateUI();
+      // Fallback to localStorage
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        try {
+          this.user = JSON.parse(storedUser);
+          this.isAuthenticated = true;
+          this.updateUI();
+          console.log('ℹ️ Using cached user data (error recovery)');
+        } catch (e) {
+          this.isAuthenticated = false;
+          localStorage.removeItem('user');
+          localStorage.removeItem('token');
+          this.updateUI();
+        }
+      } else {
+        this.isAuthenticated = false;
+        this.updateUI();
+      }
     }
   }
 
@@ -248,6 +292,7 @@ class SessionManager {
         
         // Clear localStorage
         localStorage.removeItem('user');
+        localStorage.removeItem('token');
         
         // Show logout message
         this.showNotification('Logged out successfully!', 'success');
