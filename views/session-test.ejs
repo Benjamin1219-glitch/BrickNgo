@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Session Test - BRICKNGO</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .test-box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 { color: #667eea; }
+    h2 { color: #333; margin-top: 0; }
+    pre {
+      background: #f8f8f8;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .status {
+      display: inline-block;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .status.success { background: #d4edda; color: #155724; }
+    .status.error { background: #f8d7da; color: #721c24; }
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover { background: #5568d3; }
+    .cookie-info {
+      background: #fff3cd;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔐 Session Management Test Page</h1>
+  
+  <div class="test-box">
+    <h2>1. Current Session Status</h2>
+    <div id="sessionStatus">Checking...</div>
+  </div>
+
+  <div class="test-box">
+    <h2>2. Cookies</h2>
+    <div id="cookieInfo"></div>
+  </div>
+
+  <div class="test-box">
+    <h2>3. API Tests</h2>
+    <button onclick="testLogin()">Test Login</button>
+    <button onclick="testGetMe()">Test /api/auth/me</button>
+    <button onclick="testLogout()">Test Logout</button>
+    <div id="apiResults"></div>
+  </div>
+
+  <div class="test-box">
+    <h2>4. Navigation Tests</h2>
+    <button onclick="location.href='/'">Go to Home</button>
+    <button onclick="location.href='/shop'">Go to Shop</button>
+    <button onclick="location.href='/cart'">Go to Cart</button>
+    <button onclick="location.href='/login'">Go to Login</button>
+  </div>
+
+  <script>
+    async function checkSession() {
+      const statusDiv = document.getElementById('sessionStatus');
+      
+      try {
+        const response = await fetch('/api/auth/me', {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          statusDiv.innerHTML = `
+            <div class="status success">✅ LOGGED IN</div>
+            <pre>${JSON.stringify(data.user, null, 2)}</pre>
+          `;
+        } else {
+          statusDiv.innerHTML = `
+            <div class="status error">❌ NOT LOGGED IN</div>
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          `;
+        }
+      } catch (error) {
+        statusDiv.innerHTML = `
+          <div class="status error">❌ ERROR</div>
+          <pre>${error.message}</pre>
+        `;
+      }
+    }
+
+    function checkCookies() {
+      const cookieDiv = document.getElementById('cookieInfo');
+      const cookies = document.cookie;
+      
+      if (cookies) {
+        cookieDiv.innerHTML = `
+          <div class="cookie-info">
+            <strong>Cookies found:</strong><br>
+            <pre>${cookies}</pre>
+          </div>
+          <p><small>Note: httpOnly cookies (like auth token) are not visible here for security</small></p>
+        `;
+      } else {
+        cookieDiv.innerHTML = `
+          <div class="cookie-info">
+            <strong>No visible cookies</strong><br>
+            <small>Auth token is httpOnly (secure) and won't show here</small>
+          </div>
+        `;
+      }
+    }
+
+    async function testLogin() {
+      const resultsDiv = document.getElementById('apiResults');
+      resultsDiv.innerHTML = '<p>Logging in as test@customer.com...</p>';
+      
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            email: 'test@customer.com',
+            password: 'test123'
+          })
+        });
+
+        const data = await response.json();
+        
+        resultsDiv.innerHTML = `
+          <h3>Login Response:</h3>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+        
+        if (response.ok) {
+          setTimeout(() => {
+            checkSession();
+            checkCookies();
+          }, 500);
+        }
+      } catch (error) {
+        resultsDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+      }
+    }
+
+    async function testGetMe() {
+      const resultsDiv = document.getElementById('apiResults');
+      resultsDiv.innerHTML = '<p>Testing /api/auth/me...</p>';
+      
+      try {
+        const response = await fetch('/api/auth/me', {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        const data = await response.json();
+        
+        resultsDiv.innerHTML = `
+          <h3>/api/auth/me Response:</h3>
+          <div class="status ${response.ok ? 'success' : 'error'}">
+            Status: ${response.status} ${response.ok ? '✅' : '❌'}
+          </div>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+      } catch (error) {
+        resultsDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+      }
+    }
+
+    async function testLogout() {
+      const resultsDiv = document.getElementById('apiResults');
+      resultsDiv.innerHTML = '<p>Logging out...</p>';
+      
+      try {
+        const response = await fetch('/api/auth/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+
+        const data = await response.json();
+        
+        resultsDiv.innerHTML = `
+          <h3>Logout Response:</h3>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+        
+        setTimeout(() => {
+          checkSession();
+          checkCookies();
+        }, 500);
+      } catch (error) {
+        resultsDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+      }
+    }
+
+    // Initial checks
+    checkSession();
+    checkCookies();
+    
+    // Auto-refresh every 5 seconds
+    setInterval(() => {
+      checkSession();
+      checkCookies();
+    }, 5000);
+  </script>
+</body>
+</html>

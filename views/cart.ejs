@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart - BRICKNGO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/style-advanced.css">
+  <link rel="stylesheet" href="/css/session-styles.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    /* Smooth page transition */
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f5f5;
+      opacity: 0;
+      animation: fadeIn 0.4s ease-in forwards;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Add top padding to account for fixed navbar */
+    body {
+      padding-top: 80px;
+    }
+    
+    .cart-container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 2rem;
+    }
+    
+    .cart-items {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .cart-header {
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .cart-header h1 {
+      font-size: 1.8rem;
+      color: #333;
+    }
+    .item-count {
+      color: #666;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+    
+    .cart-item {
+      display: grid;
+      grid-template-columns: 150px 1fr auto;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+    
+    .item-image {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .item-details {
+      flex: 1;
+    }
+    .item-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .item-price {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #b12704;
+      margin: 0.5rem 0;
+    }
+    .item-stock {
+      color: #007600;
+      font-size: 0.9rem;
+      margin: 0.5rem 0;
+    }
+    
+    .item-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-top: 1rem;
+    }
+    .quantity-selector {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .quantity-selector select {
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f8f8f8;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+    .remove-btn {
+      color: #0066c0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+    }
+    .remove-btn:hover {
+      color: #c45500;
+      text-decoration: underline;
+    }
+    
+    .item-subtotal {
+      text-align: right;
+    }
+    .subtotal-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .subtotal-amount {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #333;
+      margin-top: 0.5rem;
+    }
+    
+    .cart-summary {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      height: fit-content;
+      position: sticky;
+      top: 2rem;
+    }
+    
+    .summary-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.75rem 0;
+      font-size: 0.95rem;
+    }
+    .summary-row.total {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #b12704;
+      border-top: 1px solid #ddd;
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .checkout-btn {
+      width: 100%;
+      padding: 0.875rem;
+      background: #ffd814;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.3s;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      color: #0f1111;
+    }
+    .checkout-btn:hover {
+      background: #f7ca00;
+    }
+    
+    .empty-cart {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .empty-cart i {
+      font-size: 4rem;
+      color: #ddd;
+      margin-bottom: 1rem;
+    }
+    .empty-cart h2 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .empty-cart p {
+      color: #666;
+      margin-bottom: 2rem;
+    }
+    .shop-btn {
+      display: inline-block;
+      padding: 0.875rem 2rem;
+      background: #667eea;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .shop-btn:hover {
+      background: #5568d3;
+    }
+    
+    @media (max-width: 1024px) {
+      .cart-container {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+      }
+      .cart-summary {
+        position: static;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding-top: 70px;
+      }
+      
+      .cart-container {
+        margin: 1rem auto;
+        padding: 0 1rem;
+      }
+      
+      .cart-item {
+        grid-template-columns: 100px 1fr;
+        gap: 1rem;
+      }
+      .item-subtotal {
+        grid-column: 2;
+        text-align: left;
+        margin-top: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div id="cartContainer">
+    <!-- Loading state -->
+  </div>
+
+  <script src="/js/session-manager.js"></script>
+  <script>
+    const API_BASE = '/api';
+    let cartData = null;
+
+    async function loadCart() {
+      try {
+        const response = await fetch(`${API_BASE}/cart`, { credentials: 'include' });
+        
+        if (!response.ok) {
+          if (response.status === 401) {
+            renderEmptyCart('Please login to view your cart');
+            return;
+          }
+          throw new Error('Failed to load cart');
+        }
+
+        const data = await response.json();
+        cartData = data.cart;
+        
+        if (!cartData || !cartData.items || cartData.items.length === 0) {
+          renderEmptyCart('Your cart is empty');
+        } else {
+          renderCart();
+        }
+      } catch (error) {
+        console.error('Error loading cart:', error);
+        renderEmptyCart('Failed to load cart. Please try again.');
+      }
+    }
+
+    function renderEmptyCart(message) {
+      document.getElementById('cartContainer').innerHTML = `
+        <div class="cart-container">
+          <div class="empty-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <h2>${message}</h2>
+            <p>Start shopping to add items to your cart</p>
+            <a href="/shop" class="shop-btn">Continue Shopping</a>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCart() {
+      const itemCount = cartData.items.length;
+      const subtotal = cartData.total || cartData.items.reduce((sum, item) => {
+        const price = item.product?.price || item.price || 0;
+        const qty = item.quantity || 1;
+        return sum + (price * qty);
+      }, 0);
+
+      const itemsHtml = cartData.items
+        .filter(item => item.product || item.price) // Filter out completely invalid items
+        .map(item => {
+        const product = item.product || {};
+        const price = product.price || item.price || 0;
+        const itemTotal = price * (item.quantity || 1);
+        
+        // Get product ID - handle both populated and unpopulated cases with null safety
+        let productId = '';
+        if (product._id) {
+          productId = product._id;
+        } else if (item.product) {
+          productId = typeof item.product === 'object' && item.product !== null 
+            ? item.product.toString() 
+            : item.product;
+        }
+        
+        // Skip items without valid product ID
+        if (!productId) {
+          console.warn('Skipping item without valid product ID:', item);
+          return '';
+        }
+        
+        return `
+          <div class="cart-item">
+            <img src="${product.image || '/images/placeholder.jpg'}" alt="${product.name || 'Product'}" class="item-image">
+            
+            <div class="item-details">
+              <div class="item-name">${product.name || 'Unknown Product'}</div>
+              <div class="item-price">₹${price.toLocaleString()}</div>
+              <div class="item-stock">
+                <i class="fas fa-check-circle"></i> In Stock
+              </div>
+              
+              <div class="item-actions">
+                <div class="quantity-selector">
+                  <label>Qty:</label>
+                  <select onchange="updateQuantity('${productId}', this.value)">
+                    ${[...Array(Math.min(10, product.stock || 10))].map((_, i) => 
+                      `<option value="${i + 1}" ${i + 1 === item.quantity ? 'selected' : ''}>${i + 1}</option>`
+                    ).join('')}
+                  </select>
+                </div>
+                <button class="remove-btn" onclick="removeItem('${productId}')">
+                  <i class="fas fa-trash"></i> Remove
+                </button>
+              </div>
+            </div>
+            
+            <div class="item-subtotal">
+              <div class="subtotal-label">Subtotal</div>
+              <div class="subtotal-amount">₹${itemTotal.toLocaleString()}</div>
+            </div>
+          </div>
+        `;
+      })
+      .filter(html => html !== '') // Remove empty strings from invalid items
+      .join('');
+
+      document.getElementById('cartContainer').innerHTML = `
+        <div class="cart-container">
+          <div class="cart-items">
+            <div class="cart-header">
+              <h1>Shopping Cart</h1>
+              <div class="item-count">${itemCount} ${itemCount === 1 ? 'item' : 'items'}</div>
+            </div>
+            ${itemsHtml}
+          </div>
+
+          <div class="cart-summary">
+            <div class="summary-title">Order Summary</div>
+            <div class="summary-row">
+              <span>Items (${itemCount}):</span>
+              <span>₹${subtotal.toLocaleString()}</span>
+            </div>
+            <div class="summary-row">
+              <span>Delivery:</span>
+              <span style="color: #007600;">FREE</span>
+            </div>
+            <div class="summary-row total">
+              <span>Order Total:</span>
+              <span>₹${subtotal.toLocaleString()}</span>
+            </div>
+            <a href="/checkout" class="checkout-btn">
+              <i class="fas fa-lock"></i> Proceed to Checkout
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    async function updateQuantity(productId, quantity) {
+      try {
+        const response = await fetch(`${API_BASE}/cart/update`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ productId, quantity: parseInt(quantity) })
+        });
+
+        if (!response.ok) throw new Error('Failed to update quantity');
+        
+        await loadCart();
+        if (typeof sessionManager !== 'undefined') {
+          await sessionManager.loadCartCount();
+        }
+      } catch (error) {
+        console.error('Error updating quantity:', error);
+        alert('Failed to update quantity. Please try again.');
+      }
+    }
+
+    async function removeItem(productId) {
+      if (!confirm('Remove this item from cart?')) return;
+      
+      try {
+        const response = await fetch(`${API_BASE}/cart/remove/${productId}`, {
+          method: 'DELETE',
+          credentials: 'include'
+        });
+
+        if (!response.ok) throw new Error('Failed to remove item');
+        
+        await loadCart();
+        if (typeof sessionManager !== 'undefined') {
+          await sessionManager.loadCartCount();
+        }
+      } catch (error) {
+        console.error('Error removing item:', error);
+        alert('Failed to remove item. Please try again.');
+      }
+    }
+
+    // Load cart on page load
+    loadCart();
+  </script>
+</body>
+</html>

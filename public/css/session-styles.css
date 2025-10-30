@@ -1,0 +1,283 @@
+/* ============================================
+   SESSION MANAGER STYLES
+   ============================================ */
+
+/* User Menu in Dock */
+.user-menu {
+  position: relative;
+  cursor: pointer;
+}
+
+.user-avatar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.user-avatar:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.user-avatar i {
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.user-name {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* User Dropdown */
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 1rem);
+  right: 0;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  min-width: 250px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.user-menu:hover .user-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.user-info {
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+}
+
+.user-info strong {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.user-info small {
+  opacity: 0.9;
+  font-size: 0.85rem;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+}
+
+.dropdown-item:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+.dropdown-item i {
+  width: 20px;
+  text-align: center;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 0.5rem 0;
+}
+
+.logout-btn {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.logout-btn:hover {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+/* Welcome Message */
+.welcome-message {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  margin-bottom: 2rem;
+  animation: slideDown 0.6s ease;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.welcome-message i {
+  font-size: 1.5rem;
+  color: #667eea;
+  animation: wave 1s ease infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(20deg); }
+  75% { transform: rotate(-20deg); }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.welcome-message strong {
+  color: #667eea;
+  font-weight: 700;
+}
+
+/* Session Notifications */
+.session-notification {
+  position: fixed;
+  top: 100px;
+  right: 2rem;
+  background: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 10000;
+  opacity: 0;
+  transform: translateX(400px);
+  transition: all 0.3s ease;
+}
+
+.session-notification.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.session-notification.success {
+  border-left: 4px solid #28a745;
+}
+
+.session-notification.success i {
+  color: #28a745;
+  font-size: 1.5rem;
+}
+
+.session-notification.error {
+  border-left: 4px solid #dc3545;
+}
+
+.session-notification.error i {
+  color: #dc3545;
+  font-size: 1.5rem;
+}
+
+.session-notification span {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Cart Badge */
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #dc3545;
+  color: #fff;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 2px solid #fff;
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .user-name {
+    display: none;
+  }
+
+  .user-avatar {
+    padding: 0.5rem;
+  }
+
+  .user-dropdown {
+    right: -50px;
+  }
+
+  .welcome-message {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .session-notification {
+    right: 1rem;
+    left: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+}
+
+/* Dark Mode Support */
+body.dark-mode .user-dropdown {
+  background: #2d2d2d;
+}
+
+body.dark-mode .dropdown-item {
+  color: #fff;
+}
+
+body.dark-mode .dropdown-item:hover {
+  background: rgba(102, 126, 234, 0.2);
+}
+
+body.dark-mode .dropdown-divider {
+  background: #444;
+}
+
+body.dark-mode .session-notification {
+  background: #2d2d2d;
+  color: #fff;
+}
+
+body.dark-mode .session-notification span {
+  color: #fff;
+}

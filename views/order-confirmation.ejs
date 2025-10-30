@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed - BRICKNGO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/css/session-styles.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f5f5f5; }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-size: 1.8rem; font-weight: 700; text-decoration: none; color: white; }
+    
+    .confirmation-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    .success-card {
+      background: white;
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      animation: scaleIn 0.5s ease;
+    }
+    .success-icon i {
+      font-size: 3rem;
+      color: white;
+    }
+    
+    @keyframes scaleIn {
+      from {
+        transform: scale(0);
+      }
+      to {
+        transform: scale(1);
+      }
+    }
+    
+    .success-title {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .success-message {
+      color: #666;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .order-id {
+      background: #f8f9fa;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    .order-id-label {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+    .order-id-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #333;
+      font-family: monospace;
+    }
+    
+    .delivery-estimate {
+      background: #e7f5ff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+    .delivery-estimate h3 {
+      color: #0066c0;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .delivery-date {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .order-details {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    
+    .details-section {
+      margin-bottom: 2rem;
+    }
+    .details-section:last-child {
+      margin-bottom: 0;
+    }
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #667eea;
+    }
+    
+    .order-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
+    }
+    .item-image {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+    .item-info {
+      flex: 1;
+    }
+    .item-name {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.25rem;
+    }
+    .item-qty {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .item-price {
+      font-weight: 700;
+      color: #b12704;
+      font-size: 1.1rem;
+    }
+    
+    .address-box {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+      line-height: 1.8;
+    }
+    .address-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .address-text {
+      color: #666;
+    }
+    
+    .payment-info {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+    .payment-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.5rem 0;
+    }
+    .payment-row.total {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #b12704;
+      border-top: 2px solid #ddd;
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    .btn {
+      padding: 0.875rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    .btn-secondary {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+    .btn-secondary:hover {
+      background: #667eea;
+      color: white;
+    }
+    
+    @media (max-width: 768px) {
+      .action-buttons {
+        flex-direction: column;
+      }
+      .order-item {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-container">
+      <a href="/" class="logo"><i class="fas fa-hard-hat"></i> BRICKNGO</a>
+    </div>
+  </header>
+
+  <div class="confirmation-container">
+    <div class="success-card">
+      <div class="success-icon">
+        <i class="fas fa-check"></i>
+      </div>
+      <h1 class="success-title">Order Placed Successfully!</h1>
+      <p class="success-message">Thank you for your order. We'll send you shipping confirmation once your order is dispatched.</p>
+      
+      <div class="order-id">
+        <div class="order-id-label">Order ID</div>
+        <div class="order-id-value" id="orderId">Loading...</div>
+      </div>
+
+      <div class="delivery-estimate">
+        <h3><i class="fas fa-truck"></i> Estimated Delivery</h3>
+        <div class="delivery-date" id="deliveryDate">Loading...</div>
+      </div>
+    </div>
+
+    <div class="order-details">
+      <div class="details-section">
+        <h2 class="section-title">Order Items</h2>
+        <div id="orderItems">
+          <p style="text-align: center; color: #666;">Loading...</p>
+        </div>
+      </div>
+
+      <div class="details-section">
+        <h2 class="section-title">Delivery Address</h2>
+        <div class="address-box" id="deliveryAddress">
+          <p style="color: #666;">Loading...</p>
+        </div>
+      </div>
+
+      <div class="details-section">
+        <h2 class="section-title">Payment Summary</h2>
+        <div class="payment-info" id="paymentSummary">
+          <p style="color: #666;">Loading...</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <a href="/orders" class="btn btn-primary">
+        <i class="fas fa-box"></i> View My Orders
+      </a>
+      <a href="/shop" class="btn btn-secondary">
+        <i class="fas fa-shopping-bag"></i> Continue Shopping
+      </a>
+    </div>
+  </div>
+
+  <script src="/js/session-manager.js"></script>
+  <script>
+    const API_BASE = '/api';
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('id');
+
+    if (!orderId) {
+      window.location.href = '/orders';
+    }
+
+    async function loadOrderDetails() {
+      try {
+        const response = await fetch(`${API_BASE}/orders/${orderId}`, {
+          credentials: 'include'
+        });
+
+        if (!response.ok) throw new Error('Failed to load order');
+
+        const data = await response.json();
+        const order = data.order;
+
+        renderOrderDetails(order);
+      } catch (error) {
+        console.error('Error loading order:', error);
+        alert('Failed to load order details');
+        window.location.href = '/orders';
+      }
+    }
+
+    function renderOrderDetails(order) {
+      // Order ID
+      document.getElementById('orderId').textContent = `#${order._id.slice(-8).toUpperCase()}`;
+
+      // Delivery Date
+      const deliveryDate = new Date(order.createdAt);
+      deliveryDate.setDate(deliveryDate.getDate() + 5);
+      document.getElementById('deliveryDate').textContent = deliveryDate.toLocaleDateString('en-IN', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      // Order Items
+      const itemsHtml = order.items.map(item => {
+        const product = item.product;
+        return `
+          <div class="order-item">
+            <img src="${product.image || '/images/placeholder.jpg'}" class="item-image" alt="${product.name}">
+            <div class="item-info">
+              <div class="item-name">${product.name || 'Product'}</div>
+              <div class="item-qty">Quantity: ${item.quantity}</div>
+            </div>
+            <div class="item-price">₹${((product.price || 0) * item.quantity).toLocaleString()}</div>
+          </div>
+        `;
+      }).join('');
+      document.getElementById('orderItems').innerHTML = itemsHtml;
+
+      // Delivery Address
+      const addr = order.shippingAddress;
+      document.getElementById('deliveryAddress').innerHTML = `
+        <div class="address-name">${addr.name}</div>
+        <div class="address-text">
+          ${addr.addressLine1}<br>
+          ${addr.addressLine2 ? addr.addressLine2 + '<br>' : ''}
+          ${addr.city}, ${addr.state} - ${addr.pincode}<br>
+          Phone: ${addr.phone}
+        </div>
+      `;
+
+      // Payment Summary
+      const paymentMethod = order.paymentMethod === 'cod' ? 'Cash on Delivery' :
+                           order.paymentMethod === 'card' ? 'Credit/Debit Card' :
+                           order.paymentMethod === 'upi' ? 'UPI' : 'Other';
+
+      document.getElementById('paymentSummary').innerHTML = `
+        <div class="payment-row">
+          <span>Items Total:</span>
+          <span>₹${(order.subtotal || 0).toLocaleString()}</span>
+        </div>
+        <div class="payment-row">
+          <span>Delivery Charges:</span>
+          <span style="color: #007600;">${order.shippingCharge > 0 ? '₹' + order.shippingCharge : 'FREE'}</span>
+        </div>
+        <div class="payment-row">
+          <span>Tax (GST):</span>
+          <span>₹${(order.tax || 0).toLocaleString()}</span>
+        </div>
+        <div class="payment-row">
+          <span>Payment Method:</span>
+          <span>${paymentMethod}</span>
+        </div>
+        <div class="payment-row total">
+          <span>Total Paid:</span>
+          <span>₹${(order.total || 0).toLocaleString()}</span>
+        </div>
+      `;
+    }
+
+    loadOrderDetails();
+  </script>
+</body>
+</html>

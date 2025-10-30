@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Product Details - BRICKNGO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/style-advanced.css">
+  <link rel="stylesheet" href="/css/session-styles.css">
+  <style>
+    body { 
+      font-family: 'Amazon Ember', Arial, sans-serif; 
+      background: #fff;
+      margin: 0;
+      padding: 0;
+      opacity: 0;
+      animation: fadeIn 0.4s ease-in forwards;
+      padding-top: 80px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Amazon-style Breadcrumb */
+    .breadcrumb {
+      background: #f3f3f3;
+      padding: 0.75rem 2rem;
+      font-size: 0.75rem;
+      color: #565959;
+      border-bottom: 1px solid #ddd;
+    }
+    .breadcrumb a {
+      color: #007185;
+      text-decoration: none;
+    }
+    .breadcrumb a:hover {
+      text-decoration: underline;
+      color: #c7511f;
+    }
+    .breadcrumb-separator {
+      margin: 0 0.5rem;
+      color: #888;
+    }
+    
+    /* Header - Remove old header styles */
+    
+    /* Product Detail Container - Amazon Style */
+    .product-detail {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      background: white;
+    }
+    
+    .product-grid {
+      display: grid;
+      grid-template-columns: 450px 1fr 300px;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+    
+    /* Product Image Section - Amazon Style */
+    .product-images {
+      display: flex;
+      gap: 1rem;
+    }
+    .thumbnail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .thumbnail {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .thumbnail:hover,
+    .thumbnail.active {
+      border-color: #c7511f;
+      border-width: 2px;
+    }
+    .main-image-container {
+      flex: 1;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 2rem;
+      background: #f8f8f8;
+    }
+    .main-image {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      max-height: 500px;
+      object-fit: contain;
+    }
+    
+    /* Product Info - Amazon Style */
+    .product-info h1 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 0.25rem;
+      color: #0F1111;
+    }
+    .brand {
+      color: #007185;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+      text-decoration: none;
+    }
+    .brand:hover {
+      text-decoration: underline;
+      color: #c7511f;
+    }
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #e7e7e7;
+    }
+    .stars {
+      color: #ffa41c;
+      font-size: 1rem;
+      letter-spacing: 2px;
+    }
+    .rating-text {
+      color: #007185;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .rating-text:hover {
+      text-decoration: underline;
+      color: #c7511f;
+    }
+    .rating-count {
+      color: #007185;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .rating-count:hover {
+      text-decoration: underline;
+      color: #c7511f;
+    }
+    .choice-badge {
+      background: #232f3e;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      border-radius: 2px;
+      margin-left: 0.5rem;
+    }
+    
+    .price-section {
+      padding: 1rem 0;
+      border-bottom: 1px solid #e7e7e7;
+      margin-bottom: 1rem;
+    }
+    .deal-badge {
+      background: #cc0c39;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 2px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    .price {
+      font-size: 1.75rem;
+      color: #0F1111;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .price-symbol {
+      font-size: 0.875rem;
+      vertical-align: top;
+    }
+    .price-whole {
+      font-size: 1.75rem;
+    }
+    .price-unit {
+      font-size: 0.875rem;
+      color: #565959;
+      margin-left: 0.25rem;
+    }
+    .mrp {
+      text-decoration: line-through;
+      color: #565959;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+    .discount {
+      color: #cc0c39;
+      font-weight: 400;
+      font-size: 0.875rem;
+      margin-left: 0.5rem;
+    }
+    .tax-info {
+      color: #565959;
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
+    
+    .offers-section {
+      margin: 1rem 0;
+      padding: 1rem;
+      border: 1px solid #d5d9d9;
+      border-radius: 8px;
+    }
+    .offers-section h3 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: #0F1111;
+    }
+    .offer-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      padding: 0.75rem;
+      background: #f7f7f7;
+      border-radius: 4px;
+    }
+    .offer-icon {
+      color: #007185;
+      font-size: 1.25rem;
+      margin-top: 0.25rem;
+    }
+    .offer-content h4 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      color: #0F1111;
+    }
+    .offer-content p {
+      font-size: 0.75rem;
+      color: #565959;
+      line-height: 1.4;
+    }
+    .offer-link {
+      color: #007185;
+      text-decoration: none;
+      font-size: 0.75rem;
+    }
+    .offer-link:hover {
+      text-decoration: underline;
+      color: #c7511f;
+    }
+    
+    .delivery-info {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #f0f2f2;
+      border-radius: 8px;
+    }
+    .delivery-info h3 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #0F1111;
+    }
+    .delivery-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.5rem 0;
+      font-size: 0.875rem;
+    }
+    .delivery-icon {
+      color: #007600;
+      font-size: 1.125rem;
+    }
+    .delivery-date {
+      font-weight: 700;
+      color: #0F1111;
+    }
+    .delivery-details {
+      color: #565959;
+      font-size: 0.75rem;
+      margin-left: 1.75rem;
+    }
+    
+    .stock-info {
+      margin: 1rem 0;
+      font-size: 1.125rem;
+    }
+    .in-stock {
+      color: #007600;
+      font-weight: 400;
+    }
+    .out-of-stock {
+      color: #b12704;
+      font-weight: 600;
+    }
+    
+    .product-details {
+      margin: 1.5rem 0;
+    }
+    .product-details h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: #0F1111;
+    }
+    .details-list {
+      list-style: disc;
+      margin-left: 1.5rem;
+      color: #0F1111;
+    }
+    .details-list li {
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+    .details-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    .details-table tr {
+      border-bottom: 1px solid #e7e7e7;
+    }
+    .details-table td {
+      padding: 0.5rem 0.5rem 0.5rem 0;
+      font-size: 0.875rem;
+    }
+    .details-table td:first-child {
+      font-weight: 700;
+      color: #0F1111;
+      width: 150px;
+    }
+    .details-table td:last-child {
+      color: #565959;
+    }
+    
+    /* Order Box - Amazon Style */
+    .order-box {
+      border: 1px solid #d5d9d9;
+      border-radius: 8px;
+      padding: 1.25rem;
+      background: white;
+      position: sticky;
+      top: 90px;
+    }
+    .order-price {
+      font-size: 1.75rem;
+      color: #0F1111;
+      margin-bottom: 0.25rem;
+    }
+    .order-price .currency {
+      font-size: 0.875rem;
+      vertical-align: top;
+    }
+    .free-delivery {
+      color: #007600;
+      font-size: 0.875rem;
+      margin: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .free-delivery i {
+      font-size: 1.125rem;
+    }
+    .delivery-message {
+      color: #0F1111;
+      font-size: 0.875rem;
+      margin: 0.5rem 0;
+    }
+    .delivery-date-bold {
+      font-weight: 700;
+    }
+    .location-link {
+      color: #007185;
+      text-decoration: none;
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .location-link:hover {
+      text-decoration: underline;
+      color: #c7511f;
+    }
+    
+    .quantity-selector {
+      margin: 1rem 0;
+      padding: 1rem 0;
+      border-top: 1px solid #e7e7e7;
+      border-bottom: 1px solid #e7e7e7;
+    }
+    .quantity-selector label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #0F1111;
+      font-size: 0.875rem;
+    }
+    .quantity-selector select {
+      width: auto;
+      min-width: 80px;
+      padding: 0.5rem 2rem 0.5rem 0.75rem;
+      border: 1px solid #888c8c;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      background-color: #f0f2f2;
+      background-image: linear-gradient(to bottom, #f7f8fa, #e7e9ec);
+      box-shadow: 0 1px 0 rgba(255,255,255,.6) inset;
+    }
+    .quantity-selector select:hover {
+      background-color: #e3e6e6;
+    }
+    .quantity-selector select:focus {
+      outline: 2px solid #e77600;
+      outline-offset: 2px;
+      border-color: #e77600;
+    }
+    
+    .action-buttons {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .btn {
+      padding: 0.625rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      font-weight: 400;
+    }
+    .btn-add-cart {
+      background: #ffd814;
+      border: 1px solid #fcd200;
+      color: #0F1111;
+    }
+    .btn-add-cart:hover {
+      background: #f7ca00;
+      border-color: #f2c200;
+    }
+    .btn-buy-now {
+      background: #ffa41c;
+      border: 1px solid #ff8f00;
+      color: #0F1111;
+    }
+    .btn-buy-now:hover {
+      background: #fa8900;
+      border-color: #e77600;
+    }
+    .btn-go-cart {
+      background: #667eea;
+      border: 1px solid #5568d3;
+      color: white;
+    }
+    .btn-go-cart:hover {
+      background: #5568d3;
+      border-color: #4557c2;
+    }
+    
+    .secure-transaction {
+      text-align: center;
+      padding: 1rem 0 0.5rem;
+      color: #565959;
+      font-size: 0.75rem;
+      border-top: 1px solid #e7e7e7;
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .secure-transaction i {
+      color: #007185;
+    }
+    
+    @media (max-width: 1024px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+      .order-box {
+        position: static;
+      }
+      .product-images {
+        flex-direction: column;
+      }
+      .thumbnail-list {
+        flex-direction: row;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Include Navbar -->
+  <%- include('partials/navbar') %>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">›</span>
+    <a href="/#products-catalog">Building Materials</a>
+    <span class="breadcrumb-separator">›</span>
+    <span id="breadcrumbCategory">Category</span>
+    <span class="breadcrumb-separator">›</span>
+    <span id="breadcrumbProduct">Product</span>
+  </div>
+
+  <!-- Product Detail -->
+  <div class="product-detail">
+    <div id="productContainer">
+      <div style="text-align: center; padding: 3rem;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: #667eea;"></i>
+        <p style="margin-top: 1rem; color: #666;">Loading product details...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/session-manager.js"></script>
+  <script>
+    const API_BASE = '/api';
+    let currentProduct = null;
+    let currentQuantity = 1;
+    let isInCart = false;
+
+    // Get product ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
+    if (!productId) {
+      window.location.href = '/shop';
+    }
+
+    // Fetch product details
+    async function loadProduct() {
+      try {
+        const response = await fetch(`${API_BASE}/products/${productId}`);
+        if (!response.ok) throw new Error('Product not found');
+        
+        const data = await response.json();
+        currentProduct = data.product;
+        
+        // Check if product is in cart
+        await checkIfInCart();
+        
+        renderProduct();
+      } catch (error) {
+        console.error('Error loading product:', error);
+        document.getElementById('productContainer').innerHTML = `
+          <div style="text-align: center; padding: 3rem;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #b12704;"></i>
+            <h2 style="margin-top: 1rem;">Product Not Found</h2>
+            <p style="color: #666; margin: 1rem 0;">The product you're looking for doesn't exist.</p>
+            <a href="/shop" class="btn btn-add-cart" style="max-width: 200px; margin: 0 auto;">Back to Shop</a>
+          </div>
+        `;
+      }
+    }
+
+    // Check if product is already in cart
+    async function checkIfInCart() {
+      try {
+        const response = await fetch(`${API_BASE}/cart`, { credentials: 'include' });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.cart && data.cart.items) {
+            isInCart = data.cart.items.some(item => 
+              item.product._id === currentProduct._id || item.product === currentProduct._id
+            );
+          }
+        }
+      } catch (error) {
+        console.log('Not logged in or cart empty');
+      }
+    }
+
+    // Render product details
+    function renderProduct() {
+      const p = currentProduct;
+      const deliveryDate = new Date();
+      deliveryDate.setDate(deliveryDate.getDate() + 3);
+      const dayOfWeek = deliveryDate.toLocaleDateString('en-US', { weekday: 'long' });
+      const monthDay = deliveryDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+      
+      // Update page title and breadcrumb
+      document.getElementById('pageTitle').textContent = `${p.name} - BRICKNGO`;
+      document.getElementById('breadcrumbCategory').textContent = p.category;
+      document.getElementById('breadcrumbProduct').textContent = p.name;
+      
+      const discountPercent = p.price > 100 ? Math.round((1 - p.price / (p.price * 1.2)) * 100) : 0;
+      const mrpPrice = p.price > 100 ? (p.price * 1.2).toFixed(0) : 0;
+      
+      const html = `
+        <div class="product-grid">
+          <!-- Product Images -->
+          <div class="product-images">
+            <div class="thumbnail-list">
+              <img src="${p.image}" alt="${p.name}" class="thumbnail active" onclick="changeMainImage('${p.image}')">
+              ${p.images && p.images.length > 1 ? p.images.slice(1, 5).map(img => `
+                <img src="${img}" alt="${p.name}" class="thumbnail" onclick="changeMainImage('${img}')">
+              `).join('') : ''}
+            </div>
+            <div class="main-image-container">
+              <img src="${p.image}" alt="${p.name}" class="main-image" id="mainImage">
+            </div>
+          </div>
+
+          <!-- Product Info -->
+          <div class="product-info">
+            <a href="#" class="brand">Visit the BRICKNGO Store</a>
+            <h1>${p.name}</h1>
+            
+            <div class="rating">
+              <span class="stars">${'★'.repeat(Math.floor(p.rating?.average || 4.5))}${'☆'.repeat(5 - Math.floor(p.rating?.average || 4.5))}</span>
+              <span class="rating-text">${(p.rating?.average || 4.5).toFixed(1)}</span>
+              <span class="rating-count">${(p.rating?.count || 0).toLocaleString()} ratings</span>
+              ${(p.rating?.count || 0) > 100 ? '<span class="choice-badge">Amazon\'s Choice</span>' : ''}
+            </div>
+
+            ${discountPercent > 0 ? '<div class="deal-badge">Limited time deal</div>' : ''}
+            
+            <div class="price-section">
+              <div class="price">
+                <span class="price-symbol">₹</span><span class="price-whole">${p.price.toLocaleString()}</span><span class="price-unit">${p.unit}</span>
+              </div>
+              ${discountPercent > 0 ? `
+                <div class="mrp">M.R.P: <span style="text-decoration: line-through;">₹${mrpPrice}</span></div>
+                <span class="discount">(-${discountPercent}%)</span>
+              ` : ''}
+              <div class="tax-info">Inclusive of all taxes</div>
+            </div>
+
+            <!-- Offers Section -->
+            <div class="offers-section">
+              <h3>Offers</h3>
+              <div class="offer-item">
+                <div class="offer-icon"><i class="fas fa-credit-card"></i></div>
+                <div class="offer-content">
+                  <h4>Bank Offer</h4>
+                  <p>Upto ₹${Math.floor(p.price * 0.1)} discount on select Credit Cards, HDFC Bank Debit Cards. <a href="#" class="offer-link">1 offer</a></p>
+                </div>
+              </div>
+              <div class="offer-item">
+                <div class="offer-icon"><i class="fas fa-gift"></i></div>
+                <div class="offer-content">
+                  <h4>Partner Offers</h4>
+                  <p>Get GST invoice and save up to 18% on business purchases. <a href="#" class="offer-link">1 offer</a></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Description -->
+            <div class="product-details">
+              <h3>About this item</h3>
+              <ul class="details-list">
+                <li>${p.description}</li>
+                ${p.specifications ? Object.entries(p.specifications).map(([key, value]) => `
+                  <li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${value}</li>
+                `).join('') : ''}
+                <li><strong>Category:</strong> ${p.category}</li>
+                <li><strong>Available Stock:</strong> ${p.stock > 0 ? p.stock.toLocaleString() + ' units' : 'Out of stock'}</li>
+              </ul>
+            </div>
+
+            <!-- Product Specifications Table -->
+            <div class="product-details">
+              <h3>Product Specifications</h3>
+              <table class="details-table">
+                <tr>
+                  <td>Brand</td>
+                  <td>BRICKNGO</td>
+                </tr>
+                <tr>
+                  <td>Category</td>
+                  <td>${p.category}</td>
+                </tr>
+                <tr>
+                  <td>Unit Price</td>
+                  <td>₹${p.price.toLocaleString()} ${p.unit}</td>
+                </tr>
+                ${p.specifications ? Object.entries(p.specifications).map(([key, value]) => `
+                  <tr>
+                    <td>${key.charAt(0).toUpperCase() + key.slice(1)}</td>
+                    <td>${value}</td>
+                  </tr>
+                `).join('') : ''}
+                <tr>
+                  <td>Available Stock</td>
+                  <td>${p.stock.toLocaleString()} units</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <!-- Order Box -->
+          <div class="order-box">
+            <div class="order-price">
+              <span class="currency">₹</span>${(p.price * currentQuantity).toLocaleString()}<span class="price-unit"> (${currentQuantity} × ₹${p.price})</span>
+            </div>
+            
+            ${p.price > 500 ? `
+              <div class="free-delivery">
+                <i class="fas fa-check-circle"></i>
+                <span>FREE delivery</span>
+              </div>
+            ` : ''}
+            
+            <div class="delivery-message">
+              <strong class="delivery-date-bold">${dayOfWeek}, ${monthDay}</strong>
+            </div>
+            <p style="color: #007600; font-size: 0.75rem; margin: 0.25rem 0;">
+              Order within <strong>15 hrs 23 mins</strong>
+            </p>
+            <a href="#" class="location-link">
+              <i class="fas fa-map-marker-alt"></i>
+              Deliver to Hyderabad 500072
+            </a>
+
+            ${p.stock > 0 ? `
+              <div class="stock-info">
+                <span class="in-stock">In Stock</span>
+              </div>
+
+              <div class="quantity-selector">
+                <label for="quantity">Quantity:</label>
+                <select id="quantity" onchange="updateQuantity(this.value)">
+                  ${[...Array(Math.min(10, p.stock))].map((_, i) => 
+                    `<option value="${i + 1}" ${i + 1 === currentQuantity ? 'selected' : ''}>${i + 1}</option>`
+                  ).join('')}
+                </select>
+              </div>
+
+              <div class="action-buttons">
+                ${isInCart 
+                  ? '<a href="/cart" class="btn btn-go-cart"><i class="fas fa-shopping-cart"></i> Go to Cart</a>'
+                  : `<button onclick="addToCart()" class="btn btn-add-cart" id="addCartBtn">
+                      <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>`
+                }
+                <button onclick="buyNow()" class="btn btn-buy-now">
+                  <i class="fas fa-bolt"></i> Buy Now
+                </button>
+              </div>
+            ` : '<p style="color: #b12704; font-weight: 600; text-align: center; padding: 1rem;">Currently unavailable.</p>'}
+
+            <div class="secure-transaction">
+              <i class="fas fa-lock"></i>
+              <span>Secure transaction</span>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('productContainer').innerHTML = html;
+    }
+
+    // Change main image
+    function changeMainImage(src) {
+      document.getElementById('mainImage').src = src;
+      // Update active thumbnail
+      document.querySelectorAll('.thumbnail').forEach(thumb => {
+        thumb.classList.remove('active');
+        if (thumb.src === src) {
+          thumb.classList.add('active');
+        }
+      });
+    }
+
+    // Update quantity
+    function updateQuantity(qty) {
+      currentQuantity = parseInt(qty);
+      renderProduct();
+    }
+
+    // Add to cart
+    async function addToCart() {
+      try {
+        const btn = document.getElementById('addCartBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+
+        const response = await fetch(`${API_BASE}/cart/add`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ 
+            productId: currentProduct._id, 
+            quantity: currentQuantity 
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          isInCart = true;
+          if (typeof sessionManager !== 'undefined') {
+            await sessionManager.loadCartCount();
+          }
+          renderProduct();
+          
+          // Show success message
+          showNotification('✅ Added to cart successfully!', 'success');
+        } else {
+          if (response.status === 401) {
+            window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname + window.location.search);
+          } else {
+            throw new Error(data.message || 'Failed to add to cart');
+          }
+        }
+      } catch (error) {
+        console.error('Add to cart error:', error);
+        showNotification('❌ ' + error.message, 'error');
+        document.getElementById('addCartBtn').disabled = false;
+        document.getElementById('addCartBtn').innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
+      }
+    }
+
+    // Buy now - add to cart and redirect to checkout
+    async function buyNow() {
+      try {
+        // First add to cart if not already added
+        if (!isInCart) {
+          const response = await fetch(`${API_BASE}/cart/add`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ 
+              productId: currentProduct._id, 
+              quantity: currentQuantity 
+            })
+          });
+
+          if (!response.ok) {
+            if (response.status === 401) {
+              window.location.href = '/login?redirect=' + encodeURIComponent('/product?id=' + currentProduct._id);
+              return;
+            }
+            throw new Error('Failed to process order');
+          }
+        }
+
+        // Redirect to checkout
+        window.location.href = '/checkout';
+      } catch (error) {
+        console.error('Buy now error:', error);
+        showNotification('❌ ' + error.message, 'error');
+      }
+    }
+
+    // Show notification
+    function showNotification(message, type) {
+      const notification = document.createElement('div');
+      notification.className = `session-notification ${type}`;
+      notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+        <span>${message}</span>
+      `;
+      document.body.appendChild(notification);
+
+      setTimeout(() => notification.classList.add('show'), 100);
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    // Load product on page load
+    loadProduct();
+  </script>
+</body>
+</html>

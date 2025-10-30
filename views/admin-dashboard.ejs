@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - BrickNGo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f5f5f5; }
+    .admin-header { background: #667eea; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    .admin-container { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
+    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+    .stat-card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .stat-card h3 { font-size: 2rem; color: #667eea; margin-bottom: 0.5rem; }
+    .stat-card p { color: #666; }
+    .section { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+    .section h2 { margin-bottom: 1.5rem; color: #333; border-bottom: 2px solid #667eea; padding-bottom: 0.5rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f8f9fa; font-weight: 600; }
+    .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+    .btn-primary { background: #667eea; color: white; }
+    .btn-danger { background: #f56565; color: white; }
+    .btn-success { background: #48bb78; color: white; }
+    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+    .modal.active { display: flex; justify-content: center; align-items: center; }
+    .modal-content { background: white; padding: 2rem; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .close { font-size: 2rem; cursor: pointer; }
+    .badge { padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; }
+    .badge-pending { background: #ffd700; color: #333; }
+    .badge-confirmed { background: #48bb78; color: white; }
+    .badge-processing { background: #4299e1; color: white; }
+    .badge-shipped { background: #9f7aea; color: white; }
+    .badge-delivered { background: #38b2ac; color: white; }
+    .badge-cancelled { background: #f56565; color: white; }
+  </style>
+  <link rel="stylesheet" href="/css/session-styles.css">
+</head>
+<body>
+  <div class="admin-header">
+    <h1><i class="fas fa-tools"></i> Admin Dashboard</h1>
+    <div>
+      <span id="adminName">Admin</span> | 
+      <button class="btn btn-sm" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </div>
+
+  <div class="admin-container">
+    <!-- Statistics -->
+    <div class="dashboard-grid">
+      <div class="stat-card">
+        <h3 id="totalProducts">0</h3>
+        <p><i class="fas fa-boxes"></i> Total Products</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="totalOrders">0</h3>
+        <p><i class="fas fa-shopping-cart"></i> Total Orders</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="totalRevenue">₹0</h3>
+        <p><i class="fas fa-rupee-sign"></i> Total Revenue</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="pendingOrders">0</h3>
+        <p><i class="fas fa-clock"></i> Pending Orders</p>
+      </div>
+    </div>
+
+    <!-- Products Section -->
+    <div class="section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2><i class="fas fa-box"></i> Products</h2>
+        <button class="btn btn-primary" onclick="openAddProductModal()">
+          <i class="fas fa-plus"></i> Add Product
+        </button>
+      </div>
+      <div style="overflow-x: auto;">
+        <table id="productsTable">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Orders Section -->
+    <div class="section">
+      <h2><i class="fas fa-clipboard-list"></i> Recent Orders</h2>
+      <div style="overflow-x: auto;">
+        <table id="ordersTable">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Product Modal -->
+  <div id="productModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="productModalTitle">Add Product</h2>
+        <span class="close" onclick="closeProductModal()">&times;</span>
+      </div>
+      <form id="productForm">
+        <input type="hidden" id="productId">
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" id="productName" required>
+        </div>
+        <div class="form-group">
+          <label>Description *</label>
+          <textarea id="productDescription" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select id="productCategory" required>
+            <option value="Bricks">Bricks</option>
+            <option value="Cement">Cement</option>
+            <option value="Sand">Sand</option>
+            <option value="Aggregates">Aggregates</option>
+            <option value="Steel">Steel</option>
+            <option value="Blocks">Blocks</option>
+            <option value="Others">Others</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Price *</label>
+          <input type="number" id="productPrice" min="0" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label>Unit *</label>
+          <select id="productUnit" required>
+            <option value="per brick">per brick</option>
+            <option value="per bag">per bag</option>
+            <option value="per tractor">per tractor</option>
+            <option value="per load">per load</option>
+            <option value="per kg">per kg</option>
+            <option value="per block">per block</option>
+            <option value="per piece">per piece</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Stock *</label>
+          <input type="number" id="productStock" min="0" required>
+        </div>
+        <div class="form-group">
+          <label>Image URL *</label>
+          <input type="url" id="productImage" required>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <button type="submit" class="btn btn-primary">Save Product</button>
+          <button type="button" class="btn" onclick="closeProductModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Order Status Modal -->
+  <div id="orderModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Update Order Status</h2>
+        <span class="close" onclick="closeOrderModal()">&times;</span>
+      </div>
+      <form id="orderForm">
+        <input type="hidden" id="orderId">
+        <div class="form-group">
+          <label>Status *</label>
+          <select id="orderStatus" required>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Note</label>
+          <textarea id="orderNote" rows="3"></textarea>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <button type="submit" class="btn btn-primary">Update Status</button>
+          <button type="button" class="btn" onclick="closeOrderModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/session-manager.js"></script>
+  <script src="/js/admin-dashboard.js"></script>
+</body>
+</html>
