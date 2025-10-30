@@ -8,6 +8,7 @@ class SessionManager {
     this.user = null;
     this.isAuthenticated = false;
     this.cartCount = 0;
+    this.API_URL = window.API_BASE_URL || 'https://brickngo-backend.onrender.com';
   }
 
   /**
@@ -15,7 +16,7 @@ class SessionManager {
    */
   async init() {
     try {
-      const response = await fetch('/api/auth/me', {
+      const response = await fetch(`${this.API_URL}/api/auth/me`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -196,7 +197,7 @@ class SessionManager {
    */
   async loadCartCount() {
     try {
-      const response = await fetch('/api/cart', {
+      const response = await fetch(`${this.API_URL}/api/cart`, {
         credentials: 'include'
       });
 
@@ -230,7 +231,7 @@ class SessionManager {
    */
   async logout() {
     try {
-      const response = await fetch('/api/auth/logout', {
+      const response = await fetch(`${this.API_URL}/api/auth/logout`, {
         method: 'POST',
         credentials: 'include'
       });

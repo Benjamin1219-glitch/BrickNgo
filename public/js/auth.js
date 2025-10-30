@@ -1,7 +1,9 @@
 // auth.js - handles signup & login
 
+const API_URL = window.API_BASE_URL || 'https://brickngo-backend.onrender.com';
+
 async function postJson(url, data) {
-  const res = await fetch(url, {
+  const res = await fetch(`${API_URL}${url}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),

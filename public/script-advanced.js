@@ -179,7 +179,10 @@ const BRICKNGO = {
 
     // Fetch product by name to get ID
     try {
-      const response = await fetch('/api/products');
+      const API_URL = window.API_BASE_URL || 'https://brickngo-backend.onrender.com';
+      const response = await fetch(`${API_URL}/api/products`, {
+        credentials: 'include'
+      });
       const data = await response.json();
       const product = data.products.find(p => p.name === productName);
       

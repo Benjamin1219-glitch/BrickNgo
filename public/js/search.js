@@ -35,7 +35,10 @@ class SearchSystem {
 
   async loadProducts() {
     try {
-      const response = await fetch('/api/products');
+      const API_URL = window.API_BASE_URL || 'https://brickngo-backend.onrender.com';
+      const response = await fetch(`${API_URL}/api/products`, {
+        credentials: 'include'
+      });
       const data = await response.json();
       this.products = data.products || [];
       console.log(`📦 Loaded ${this.products.length} products`);

@@ -1,22 +1,24 @@
 // cart-client.js - renders cart and allows update/remove
 
+const API_URL = window.API_BASE_URL || 'https://brickngo-backend.onrender.com';
+
 async function apiGet(url) {
-  const res = await fetch(url, { credentials: 'include' });
+  const res = await fetch(`${API_URL}${url}`, { credentials: 'include' });
   return res.json();
 }
 
 async function apiPost(url, data) {
-  const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), credentials: 'include' });
+  const res = await fetch(`${API_URL}${url}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), credentials: 'include' });
   return res.json();
 }
 
 async function apiPut(url, data) {
-  const res = await fetch(url, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), credentials: 'include' });
+  const res = await fetch(`${API_URL}${url}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), credentials: 'include' });
   return res.json();
 }
 
 async function apiDelete(url) {
-  const res = await fetch(url, { method: 'DELETE', credentials: 'include' });
+  const res = await fetch(`${API_URL}${url}`, { method: 'DELETE', credentials: 'include' });
   return res.json();
 }
 
