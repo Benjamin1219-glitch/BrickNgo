@@ -2,7 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
 
@@ -18,6 +20,20 @@ process.on('uncaughtException', (error) => {
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// CORS configuration for Netlify frontend
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:8888',
+    'https://brickngo-shop.netlify.app',
+    /\.netlify\.app$/  // Allow all Netlify preview deployments
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+
 // Import models
 const Product = require("./models/Product");
 const Contact = require("./models/Contact");
@@ -31,18 +47,27 @@ app.use(express.static(path.join(__dirname, 'public'))); // Serves files from pu
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, 'views'));
 
-// Session middleware
+// MongoDB connection
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/building_materials";
+
+// Session middleware with MongoDB store
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "building-materials-secret-key",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }
+    store: MongoStore.create({
+      mongoUrl: MONGODB_URI,
+      touchAfter: 24 * 3600
+    }),
+    cookie: { 
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+    }
   })
 );
 
-// MongoDB connection (optional - website works without it)
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/building_materials";
 mongoose
   .connect(MONGODB_URI, {
     useNewUrlParser: true,
