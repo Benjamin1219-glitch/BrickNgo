@@ -288,6 +288,13 @@ class SessionManager {
   }
 
   /**
+   * Get cart count
+   */
+  getCartCount() {
+    return this.cartCount;
+  }
+
+  /**
    * Check if user is authenticated
    */
   isLoggedIn() {
